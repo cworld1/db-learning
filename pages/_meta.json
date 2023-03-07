@@ -1,0 +1,30 @@
+{
+  "instruction": "Instrucion",
+  "00-at-the-beginning": "At the beginning",
+  "-- Main Chapter": {
+    "type": "separator",
+    "title": "Main Chapter"
+  },
+  "01-ds-sys-summary": "数据库系统概述",
+  "02-relational-db-sys": "关系数据库",
+  "-- Extend": {
+    "type": "separator",
+    "title": "Extend"
+  },
+  "ex01-ds-type": "数据库类型",
+  "index": {
+    "title": "Introduction",
+    "type": "page"
+  },
+  "documention": {
+    "title": "Documention",
+    "type": "page",
+    "href": "./instruction"
+  },
+  "contact": {
+    "title": "Blog ↗",
+    "type": "page",
+    "href": "https://blog.cworld.top/",
+    "newWindow": true
+  }
+}
