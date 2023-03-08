@@ -1,6 +1,11 @@
-const withNextra = require('nextra')({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.tsx',
-})
+const withNextra = require("nextra")({
+  // 基础配置
+  latex: true,
+  defaultShowCopyCode: true,
 
-module.exports = withNextra()
+  // 主题
+  theme: "nextra-theme-docs",
+  themeConfig: "./theme.config.tsx",
+});
+
+module.exports = withNextra();

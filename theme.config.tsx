@@ -103,7 +103,7 @@ const config: DocsThemeConfig = {
   },
 
   // 右侧侧栏
-  docsRepositoryBase: 'https://github.com/cworld/database-learning',
+  docsRepositoryBase: 'https://github.com/cworld1/ds-learning',
   editLink: {
     text: '在 GitHub 上编辑此页面 →'
   },
@@ -117,13 +117,13 @@ const config: DocsThemeConfig = {
     text: (
       <p className="mt-6 text-xs" style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
         <span>
+          <script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
           © {new Date().getFullYear()} • <a href="https://cworld.top/" target="_blank">CWorld</a> • 总访问 <span id="busuanzi_value_site_pv">???</span>
-          <script src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
         </span>
         <span>
           由 <a href="https://nextjs.org" target="_blank" rel="external nofollow noopener">Next.js</a> 强力驱动
           <span style={{ padding: "0 .8rem" }}>|</span>
-          主题 - <a href="https://github.com/ikeq/hexo-theme-inside" target="_blank" rel="external nofollow noopener">Nextra</a>
+          主题 - <a href="https://nextra.site" target="_blank" rel="external nofollow noopener">Nextra</a>
         </span>
         <style jsx>{`
           a {
