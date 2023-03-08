@@ -1,5 +1,5 @@
 {
-  "instruction": "Instrucion",
+  "intro": "Introduction",
   "00-at-the-beginning": "At the beginning",
   "-- Main Chapter": {
     "type": "separator",
@@ -13,13 +13,16 @@
   },
   "ex01-ds-type": "数据库类型",
   "index": {
-    "title": "Introduction",
-    "type": "page"
+    "title": "Home",
+    "type": "page",
+    "theme": {
+      "layout": "raw"
+    }
   },
   "documention": {
     "title": "Documention",
     "type": "page",
-    "href": "./instruction"
+    "href": "./intro"
   },
   "contact": {
     "title": "Blog ↗",
