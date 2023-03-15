@@ -5,12 +5,10 @@
 - Information systems deal with storage and retrieval of data 信息系统处理数据的存储和检索
 - Databases represent a whole collection of elements 数据库是所有元素的集合
 - Relations are sets of tuples 关系的元组集
-  - suitable to represent collections of data of any size 
+  - suitable to represent collections of data of any size
   - can be illustrated(说明) by tables
 
 ## 关系的形式化定义
-
-
 
 > A relation schema provides an abstract description of the tuples(元组) in a relation 关系架构提供关系中的元组的抽象描述
 
@@ -23,9 +21,11 @@
 ### 笛卡儿积（Cartesian Product）
 
 给定一组域 $D_1，D_2，…，D_n$（它们可以包含相同的元素，既可以完全不同，也可以部分或全部相同），则 $D_1，D_2，…，D_n$ 的笛卡儿积为：
+
 $$
 D_1 × D_2 × … × D_n = \{(d_1，d_2，…，d_n) | d_i ∈ D_i，i=1, 2, …, n\}
 $$
+
 由定义可以看出，笛卡儿积也是一个集合，**一个二维表**。其中：
 
 1. 每一个元素 $(d1，d2，… ，dn)$ 中的每一个值 $d_i$ 叫做一个分量（Component），分量来自相应的域（$d_i ∈ D_i$）。
@@ -53,7 +53,7 @@ $$
 
    > 定义在域 $D_1，D_2，…，D_n$ （不要求完全相异）上的关系由关系头（Heading）和关系体（Body）组成。
    >
-   > - 关系头由属性名  $A_1，A_2，…，A_n$ 的集合组成，每个属性  $A_i$ 对应一个域 $D_i (i=1，2，… ，n)$。关系头（关系框架）是关系的数据结构的描述，它是固定不变的。
+   > - 关系头由属性名 $A_1，A_2，…，A_n$ 的集合组成，每个属性 $A_i$ 对应一个域 $D_i (i=1，2，… ，n)$。关系头（关系框架）是关系的数据结构的描述，它是固定不变的。
    > - 关系体是指关系结构中的内容或者数据，它随元组的插入、删除或修改而变化。
 
 ## 关系的性质
