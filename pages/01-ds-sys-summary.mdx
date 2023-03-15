@@ -6,6 +6,22 @@
 
 数据处理是将数据转换成信息的过程，包括对数据的收集、管理、加工利用乃至信息输出等一系列活动。
 
+### 为什么要学习 DS
+
+为什么要学习 Database？
+
+- Shift from computation to information
+
+  - Always been true for corporate computing
+  - The Web made this point for personal computing
+  - More so true for scientific computing
+
+- Big Data (Volume 体积, Variety 种类, Velocity 速度, Veracity 真实性)
+
+  - Digital libraries, life science projects
+  - Multimedia databases, social web (Facebook, Twitter, You Tube)
+  - Semantic annotations(语义注释), sensor data(感知数据), uncertain data
+
 ### 四种数据模型
 
 目前，在数据库领域中常用的数据模型主要有层次模型（Hierarchical Model）、网状模型（Network Model）、关系模型（Relational Model）和面向对象模型（Object-oriented Model）四种。
@@ -37,6 +53,18 @@ A **database** is a very large, intergrated(集成) and commonly used collection
 1. 集成性。将某特定应用环境中的各种应用相关的数据及其数据之间的联系全部集中地并按照一定的结构形式进行存储，或者说，把数据库看成为若干个性质不同的数据文件的联合和统一的数据整体。
 2. 共享性。数据库中的数据可为多个不同的用户所共享，即多个不同的用户可使用多种不同的语言，为了不同的应用目的，而同时存取数据库，甚至同时存取数据库中的同一数据。
 
+### 数据模型
+
+数据模型：A collection of concepts for describing data
+
+Schema: An abstract description of database using the given data model
+
+schema 是元数据的一个抽象集合。模式（Schema）是数据库中全体数据的逻辑结构和特征的描述。
+
+- Physical schema：物理存储结构
+- Logical schema：如 Data Definition Language (DDL) 等数据定义方式
+- External schema：如 Data Manipulation Language (DML)
+
 ## 数据库系统
 
 ### 数据库组成
@@ -45,7 +73,9 @@ A **database** is a very large, intergrated(集成) and commonly used collection
 
 #### 数据库
 
-![[#什么是数据库]]
+A **database** is a very large, intergrated(集成) and commonly used collection of data.
+
+数据库（Database，简称 DB）是长期储存在计算机内、有组织的、可共享的大量数据的集合。
 
 #### 用户
 
@@ -72,7 +102,7 @@ A **database** is a very large, intergrated(集成) and commonly used collection
 
 硬件（Hardware）系统指存储和运行数据库系统的硬件设备，包括 CPU、内存、大容量的存储设备、输入|输出设备和外部设备等。
 
-![](/assets/20230307112124.png)
+![](01-ds-sys-summary.assets/20230307112124.png)
 
 ### 数据管理系统的功能
 
@@ -100,7 +130,7 @@ A **database** is a very large, intergrated(集成) and commonly used collection
 
 > 逻辑数据库与物理数据库一般不一样，操作者负责弄清逻辑数据库的数据存放，操作系统负责衔接逻辑数据库与物理数据库的关系，将数据存储在硬盘上。
 
-![](/assets/20230307083015.png)
+![](01-ds-sys-summary.assets/20230307083015.png)
 
 ### 数据库系统的三级模式结构
 
@@ -145,7 +175,7 @@ DBMS 是由许多程序所组成的一个大型软件系统，每个程序都有
 
 一个完整的 DBMS 通常应由语言编译处理程序、系统运行控制程序及系统建立、维护程序和数据字典等部分组成。
 
-![](/assets/20230307093344.png)
+![](01-ds-sys-summary.assets/20230307093344.png)
 
 ### DBMS 的功能
 
@@ -155,3 +185,10 @@ DBMS 是由许多程序所组成的一个大型软件系统，每个程序都有
 4. **数据库的建立和维护功能**：数据库的建立包括数据库的初始数据的装入与数据转换等，数据库的维护包括数据库的转储、恢复、重组织与重构造、系统性能监视与分析等。
 5. **数据通信接口**：DBMS 提供与其他软件系统进行通信的功能，实现用户程序与 DBMS、DBMS 与 DBMS、DBMS 与文件系统之间的通信。
 6. **数据组织、存储和管理**：DBMS 负责对数据库中需要存放的各种数据（如数据字典、用户数据、存取路径等）的组织、存储和管理工作，确定以何种文件结构和存取方式物理地组织这些数据，以提高存储空间利用率和对数据库进行增、删、查、改的效率。
+
+![image-20230314083701052](01-ds-sys-summary.assets/image-20230314083701052.png)
+
+
+
+
+
