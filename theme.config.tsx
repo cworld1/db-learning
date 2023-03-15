@@ -30,7 +30,7 @@ const config: DocsThemeConfig = {
   // 顶栏
   logo,
   project: {
-    link: 'https://github.com/cworld/database-learning',
+    link: 'https://github.com/cworld1/ds-learning',
   },
   chat: {
     link: 'https://t.me/cworld0_cn',
