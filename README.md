@@ -7,7 +7,7 @@
 
 Some notes and code about CWorld learning Database.
 
-[前往阅读 →](https://ds.cworld.top/)
+[Get Stared 前往阅读 →](https://ds.cworld.top/)
 
 ## Quick Start the Project Online
 
@@ -65,13 +65,12 @@ Starts the development server.
 `pnpm build`
 Bundles your website into static files for production.
 
-## 贡献
+## Contributions
 
-由于作者只是个正在浅学 Database 的初学者，所以笔记难免存在明显纰漏，还请读者们多多海涵。此外，也欢迎诸位使用 PR 或 Issues 来改善它们。
+As the author is only a beginner in learning Data Analysis, there are obvious mistakes in his notes. Readers are also invited to make a lot of mistakes. In addition, you are welcome to use PR or Issues to improve them.
 
-## 鸣谢
-
-一些电子教材对作者学习上帮助颇多，没有这些资料，就没有这部笔记。在此对这些教材的原作者深表感谢。读者若对此项目笔记抱有疑惑，也可以仔细阅读以下教材以作弥补。
+## Thanks
+Some of the electronic textbooks have helped the author a lot in his studies, and without them, this notebook would not have been possible. I would like to express my gratitude to the original authors of these materials. If you have any doubts about this project, you can also read the following textbooks carefully to remedy them.
 
 - [数据库原理及应用 - shark-Gao 的博客](https://blog.csdn.net/qq_58608526/article/details/122922114)
 - [数据库原理及应用教程（微课版）](https://annas-archive.org/md5/08cf09ef24ff4989641044caa544b29e)
