@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cworld1/ds-learning.git"
+    "url": "git+https://github.com/cworld1/db-learning.git"
   },
   "author": "CWorld <cworld0@qq.com>",
   "license": "GPL 3.0",
   "bugs": {
-    "url": "https://github.com/cworld1/ds-learning/issues"
+    "url": "https://github.com/cworld1/db-learning/issues"
   },
-  "homepage": "https://github.com/cworld1/ds-learning#readme",
+  "homepage": "https://github.com/cworld1/db-learning#readme",
   "dependencies": {
     "@vercel/analytics": "^0.1.11",
     "next": "^13.0.6",

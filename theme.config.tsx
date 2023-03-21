@@ -30,7 +30,7 @@ const config: DocsThemeConfig = {
   // 顶栏
   logo,
   project: {
-    link: 'https://github.com/cworld1/ds-learning',
+    link: 'https://github.com/cworld1/db-learning',
   },
   chat: {
     link: 'https://t.me/cworld0_cn',
@@ -103,7 +103,7 @@ const config: DocsThemeConfig = {
   },
 
   // 右侧侧栏
-  docsRepositoryBase: 'https://github.com/cworld1/ds-learning',
+  docsRepositoryBase: 'https://github.com/cworld1/db-learning',
   editLink: {
     text: '在 GitHub 上编辑此页面 →'
   },

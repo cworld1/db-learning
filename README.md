@@ -1,11 +1,11 @@
 # Database Learning
 
-[![GitHub stars](https://img.shields.io/github/stars/cworld1/ds-learning?style=flat-square)](https://github.com/cworld1/ds-learning/stargazers)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/cworld1/ds-learning?label=commits&style=flat-square)](https://github.com/cworld1/ds-learning/commits)
-[![Vercel Production Status](https://img.shields.io/github/deployments/cworld1/ds-learning/production?label=vercel&logo=vercel&style=flat-square)](https://vercel.com/cworld0/ds-learning)
-[![GitHub license](https://img.shields.io/github/license/cworld1/ds-learning?style=flat-square)](https://github.com/cworld1/ds-learning/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/cworld1/db-learning?style=flat-square)](https://github.com/cworld1/db-learning/stargazers)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/cworld1/db-learning?label=commits&style=flat-square)](https://github.com/cworld1/db-learning/commits)
+[![Vercel Production Status](https://img.shields.io/github/deployments/cworld1/db-learning/production?label=vercel&logo=vercel&style=flat-square)](https://vercel.com/cworld0/ds-learning)
+[![GitHub license](https://img.shields.io/github/license/cworld1/db-learning?style=flat-square)](https://github.com/cworld1/db-learning/blob/master/LICENSE)
 
-关于 CWorld 学习 Database 一些笔记和代码。
+Some notes and code about CWorld learning Database.
 
 [前往阅读 →](https://ds.cworld.top/)
 
@@ -13,7 +13,7 @@
 
 Click the button to clone this repository and deploy it on Vercel:
 
-[![](https://vercel.com/button)](https://vercel.com/new/clone?s=https://github.com/cworld1/ds-learning&showOptionalTeamCreation=false)
+[![](https://vercel.com/button)](https://vercel.com/new/clone?s=https://github.com/cworld1/db-learning&showOptionalTeamCreation=false)
 
 ## Local Development
 
@@ -37,7 +37,7 @@ corepack prepare pnpm@latest --activate
 ### 2. Clone the repository
 
 ```shell
-git clone https://github.com/cworld1/ds-learning.git
+git clone https://github.com/cworld1/db-learning.git
 cd ds-learning
 ```
 
