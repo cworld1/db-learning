@@ -410,7 +410,7 @@ SELECT DISTINCT SNo FROM SC
    -- 等价于：
    SELECT TNo, TN, Prof FROM T
    	WHERE Sal>=1000 AND Sal<=1500
-   
+
    SELECT TNo, TN, Prof FROM T
    	WHERE Sal NOT BETWEEN 1000 AND 1500
    ```
@@ -425,6 +425,539 @@ SELECT DISTINCT SNo FROM SC
    -- 查询选修 C1 或 C2 的学生的学号、课程号和成绩。
    SELECT SNo, CNo, Score FROM SC
    	WHERE CNo IN('C1'，'C2')
+   -- 此语句也可以使用逻辑运算符“OR”实现：
+   SELECT SNo, CNo, Score FROM SC
+   	WHERE CNo = 'C1' OR CNo = 'C2'
+
+   -- 查询没有选修 C1，也没有选修 C2 的学生的学号、课程号和成绩。
+   SELECT SNo, CNo, Score FROM SC
+   	WHERE CNo NOT IN('C1'，'C2')
+   -- 等价于：
+   SELECT SNo, CNo, Score FROM SC
+   	WHERE (CNo <> 'C1') AND (CNo <> 'C2')
    ```
 
-   
+5. **部分匹配查询**
+
+   以上各例均属于完全匹配查询，当不知道完全精确的值时，用户还可以使用 LIKE 或 NOT LIKE 进行部分匹配查询（也称模糊查询）。LIKE 定义的一般格式为：
+
+   `<属性名> LIKE <字符串常量>`
+
+   其中，属性名必须为字符型，字符串常量中的字符可以包含通配符，利用这些通配符，可以进行模糊查询。
+
+   字符串中的通配符及其功能：
+
+   | 通配符       | 功能                   | 实例   | 含义                     |
+   | ------------ | ---------------------- | ------ | ------------------------ |
+   | %            | 代表 0 个或多个字符    | ab%    | 'ab'后可接任意字符串     |
+   | \_（下划线） | 代表一个字符           | a_b    | 'a'与'b'之间可有一个字符 |
+   | [ ]          | 表示在某一范围的字符   | [0-9]  | 0~9 之间的字符           |
+   | [^ ]         | 表示不在某一范围的字符 | [^0-9] | 不在 0~9 之间的字符      |
+
+   如：
+
+   ```sql
+   -- 查询所有姓张的教师的教师号和姓名。
+   SELECT TNo, TN FROM T
+      WHERE TN LIKE '张%'
+
+   -- 查询姓名中第二个汉字是“力”的教师号和姓名。
+   SELECT TNo, TN FROM T
+      WHERE TN LIKE'_力%'
+   ```
+
+6. 空值查询
+
+   某个字段没有值称为具有空值（NULL）。通常没有为一个列输入值时，该列的值就是空值。空值不同于零和空格，它不占任何存储空间。
+
+   如：
+
+   ```sql
+   -- 查询没有考试成绩的学生的学号和相应的课程号。
+   SELECT SNo, CNo FROM SC
+   	WHERE Score IS NULL
+   ```
+
+   > 这里的空值条件为 Score IS NULL，不能写成 Score=NULL。
+
+### 常用库函数及统计汇总查询
+
+SQL 提供了许多库函数，增强了基本检索能力。常用的库函数：
+
+| 函数名称 | 功能             |
+| -------- | ---------------- |
+| AVG      | 按列计算平均值   |
+| SUM      | 按列计算值的总和 |
+| MAX      | 求一列中的最大值 |
+| MIN      | 求一列中的最小值 |
+| COUNT    | 按列值统计个数   |
+
+如：
+
+```sql
+-- 求学号为 S1 的学生的总分和平均分。
+SELECT SUM(Score) AS TotalScore,
+	AVG(Score) AS AvgScore
+	FROM SC WHERE (SNo = 'S1')
+```
+
+查询结果：
+
+| TotalScore | AvgScore |
+| ---------- | -------- |
+| 175        | 87.5     |
+
+上述查询语句中 AS 后面的 TotalScore 和 AvgScore 是别名，别名会显示在查询结果中，让使用者能清楚地知道查询内容所表示的含义。
+
+> 在使用库函数进行查询时，通常要给查询的每一项内容加别名，否则查询结果中就不显示列名。
+
+如：
+
+```sql
+-- 求选修 C1 号课程的最高分、最低分及之间相差的分数。
+SELECT MAX(Score) AS MaxScore,
+	MIN(Score) AS MinScore,
+	MAX(Score)－MIN(Score) AS Diff
+	FROM SC WHERE (CNo = 'C1')
+
+-- 求计算机系学生的总数。
+SELECT COUNT（SNo）FROM S
+	WHERE Dept= '计算机'
+
+-- 求学校中共有多少个系。
+SELECT COUNT(DISTINCT Dept) AS DeptNum FROM S
+
+-- 利用特殊函数 COUNT(*)求计算机系学生的总数。
+SELECT COUNT(*) FROM S WHERE Dept='计算机'
+```
+
+> 加入关键字 `DISTINCT` 后表示消去重复行，可计算字段“Dept”不同值的数目。`COUNT` 函数对空值不计算，但对 0 进行计算。
+>
+> `COUNT(*)` 用来统计元组的个数，不消除重复行，不允许使用 `DISTINCT` 关键字。
+
+### 分组查询
+
+分组查询 `GROUP BY` 子句可以将查询结果按属性列或属性列组合在行的方向上进行分组，每组在属性列或属性列组合上具有相同的值。
+
+如：
+
+```sql
+-- 查询每个教师的教师号及其任课的门数。
+SELECT TNo, COUNT(*) AS C_Num
+	FROM TC GROUP BY TNo
+```
+
+`GROUP BY` 子句按 TNo 的值分组，所有具有相同 TNo 的元组为一组，对每一组使用函数 `COUNT` 进行计算，统计出各位教师任课的门数。查询结果如下：
+
+| TNo | C_Num |
+| --- | ----- |
+| T1  | 2     |
+| T2  | 2     |
+| T3  | 2     |
+| T4  | 2     |
+| T5  | 2     |
+
+若在分组后还要按照一定的条件进行筛选，则需使用 `HAVING` 子句。
+
+如：
+
+```sql
+-- 查询选修两门以上（含两门）课程的学生的学号和选课门数。
+SELECT SNo, COUNT(*) AS SC_Num -- 新列 SNo、SC_Num
+	FROM SC
+	GROUP BY SNo -- 按学号分组
+	HAVING (COUNT(*) >= 2) -- 条件：计数大于等于2
+```
+
+查询结果如下：
+
+| SNo | SC_Num |
+| --- | ------ |
+| S1  | 2      |
+| S2  | 4      |
+| S3  | 3      |
+| S4  | 3      |
+
+`GROUP BY` 子句按 SNo 的值分组，所有具有相同 SNo 的元组为一组，对每一组使用函数 COUNT 进行计算，统计出每个学生选课的门数。HAVING 子句去掉不满足 COUNT(\*)>=2 的组。
+
+当在一个 SQL 查询中同时使用 `WHERE` 子句，`GROUP BY` 子句和 `HAVING` 子句时，其顺序是 `WHERE`、`GROUP BY`、`HAVING`。`WHERE` 与 `HAVING` 子句的根本区别在于作用对象不同。WHERE 子句作用于基本表或视图，从中选择满足条件的元组；`HAVING` 子句作用于组，选择满足条件的组， 必须用在 `GROUP BY` 子句之后，但 `GROUP BY` 子句可没有 HAVING 子句。
+
+### 查询结果的排序
+
+当需要对查询结果排序时，应该使用 `ORDER BY` 子句，`ORDER BY` 子句必须出现在其他子句之后。排序方式可以指定：`DESC` 为降序，`ASC` 为升序，缺省时为升序。
+
+如：
+
+```sql
+-- 查询选修 C1 的学生学号和成绩，并按成绩降序排列。
+SELECT SNo, Score FROM SC WHERE (CNo = 'C1')
+	ORDER BY Score DESC
+```
+
+## 多关系（表）的连接查询
+
+数据库中的各个表中存放着不同的数据，用户往往需要用多个表中的数据来组合、提炼出所需要的信息。如果一个查询需要对多个表进行操作，就称为连接查询。连接查询的结果集或结果表称为表之间的连接。连接查询实际上是通过各个表之间共同列的关联性来查询数据的，数据表之间的联系是通过表的字段值来体现的，这种字段称为连接字段。连接操作的目的就是通过加在连接字段上的条件将多个表连接起来，以便从多个表中查询数据。
+
+当查询同时涉及两个及两个以上的表时，称为连接查询。
+
+多关系（表）的连接查询结构表的连接方法有以下两种：
+
+1. 表之间满足一定条件的行进行连接时，FROM 子句指明进行连接的表名，WHERE 子句指明 连接的列名及其连接条件：
+
+   ```sql
+   SELECT [ALL|DISTINCT] [TOP N [PERCENT][WITH TIES]]
+   	〈列名〉[AS 别名 1] (，列名2 [AS 别名 2])
+   	FROM〈表名 1〉[AS 表 1 别名] (，〈表名 2〉[AS 表 2 别名,...])
+   	[WHERE〈检索条件〉]
+   	[GROUP BY <列名 1> [HAVING <条件表达式>]]
+   	[ORDER BY <列名 2> [ASC|DESC]]
+   ```
+
+2. 利用关键字 JOIN 进行连接。
+
+具体的连接方法分为以下几种：
+
+- INNER JOIN（内连接）显示符合条件的记录，此为默认值。
+- LEFT（OUTER）JOIN 称为左（外）连接，用于显示符合条件的数据行以及左边表中不符合条件的数据行。此时右边数据行会以 NULL 来显示。
+- RIGHT（OUTER）JOIN 称为右（外）连接，用于显示符合条件的数据行以及右边表中不符合条件的数据行。此时左边数据行会以 NULL 来显示。
+- FULL（OUTER）JOIN 显示符合条件的数据行以及左边表和右边表中不符合条件的数据行。此时缺乏数据的数据行会以 NULL 来显示。
+- CROSS JOIN 将一个表的每一个记录和另一表的每个记录匹配成新的数据行。
+
+当将 JOIN 关键词放于 FROM 子句中时，应有关键词 ON 与之对应，以表明连接的条件。
+
+```sql
+SELECT [ALL|DISTINCT][TOP N [PERCENT][WITH TIES]]
+	列名 1 [AS 别名 1] (, 列名 2 [ AS 别名 2]...)
+	[INTO 新表名]
+	FROM 表名 1 [[AS] 表 1 别名]
+	[INNER|RIGHT|FULL|OUTER|CROSS] JOIN 表名 2 [[AS] 表 2 别名]
+	ON 条件
+```
+
+下面介绍几种表的连接操作。
+
+> [SQL 多表查询：SQL JOIN 连接查询各种用法总结 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/68136613)
+>
+> ### 写在前面
+>
+> 在实际应用中，大多的查询都是需要多表连接查询的，但很多初学 SQL 的小伙伴总对各种 JOIN 有些迷糊。回想一下，初期很长一段时间，我常用的似乎也就是等值连接 WHERE 后面加等号，对各种 JOIN 也是不求甚解，今天索性就来个 JOIN 的小总结。
+>
+> 首先，设定两张表，作为下面例子的操作对象。
+>
+> 表 1 学生信息表：
+>
+> ![](./03-data-def-lang.assets/v2-5ce6367d37234828fb5e5958113e6a51_b.jpg)
+>
+> 表 2 专业班级表：
+>
+> ![](./03-data-def-lang.assets/v2-871f75983ed7a802c9acb76541278fec_b.jpg)
+>
+> 再来个 SQL JOIN 连接查询各种用法的大合影，先预热一下。
+>
+> ![](./03-data-def-lang.assets/v2-7dd2e77f2d94fb2752900b05ba7ae67b_r.jpg)
+>
+> ### No.1 【INNER JOIN】内连接
+>
+> 这是最常用的，获取两个表中指定字段满足匹配关系的记录。
+>
+> ![](./03-data-def-lang.assets/v2-eaa5d9a2aa94c71d0a0633339481afd9_b.jpg)
+>
+> 内连接通常有两种情况：
+>
+> **等值连接：**查找两个表中连接字段相等的记录。
+>
+> ```sql
+> -- 查询每个学生的学号、姓名、籍贯、年龄、专业、班级
+> -- 涉及到 student 和 major 两张表，用共有字段“学号”为连接字段
+>
+> -- 写法1：使用 INNER JOIN
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+> 	FROM student A
+> 	INNER JOIN major B
+> 	ON  A.学号=B.学号
+>
+> -- 写法2：省去了 INNER，直接写 JOIN，与 INNER JOIN 没有区别
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A
+>     JOIN major B
+>     ON A.学号=B.学号
+>
+> -- 写法3：使用 WHERE，已经逐渐被淘汰
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A, major B
+>     WHERE A.学号 = B.学号
+>
+> -- 上面三种写法的结果都是一样的，推荐使用写法2
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-e5ad3fb64a5d33027a2615ac67026785_b.jpg)
+>
+> **自身连接：**就是和自己进行连接查询，给一张表取两个不同的别名，然后附上连接条件。
+>
+> ```sql
+> -- 要在学生表里查询与 HH 同龄且籍贯也相同的学生信息
+>
+> SELECT B.学号, B.姓名, B.性别, B.籍贯, B.年龄
+>     FROM student A
+>     JOIN student B
+>     ON A.年龄=B.年龄 AND A.籍贯=B.籍贯 AND A.姓名='HH'
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-482a63b111a16667d8541e332f44dd01_b.jpg)
+>
+> ### No.2 【LEFT JOIN】左连接
+>
+> 获取左表中的所有记录，即使在右表没有对应匹配的记录。
+>
+> ![](./03-data-def-lang.assets/v2-45fcd21c1199f2ff71ecf1231a18c86b_b.jpg)
+>
+> ```sql
+> -- 左连接：显示左表student所有记录，如右表中没有与之
+> -- 匹配的项则以NULL值代替。
+>
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A LEFT JOIN major B
+>     ON  A.学号 = B.学号
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-4e7bedab0b48f3d0ce3ee2b500903834_b.jpg)
+>
+> ### No.3 【RIGHT JOIN】右连接
+>
+> 用于获取右表中的所有记录，即使左表没有对应匹配的记录。
+>
+> ![](./03-data-def-lang.assets/v2-742cc2400cf90e34e4b19d0587047dec_b.jpg)
+>
+> ```sql
+> -- 右连接：显示右表 major 所有记录，如左表中没有与之
+> -- 匹配的项则以NULL值代替。
+>
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A RIGHT JOIN major B
+>     ON A.学号=B.学号
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-5ed2e1d82e92575ba60778511949701d_b.jpg)
+>
+> ### No.4 【FULL JOIN】 完全连接
+>
+> 返回两个表中的所有行。
+>
+> ![](./03-data-def-lang.assets/v2-4da74dd801c81a61eb10e3699d87e4c6_b.jpg)
+>
+> ```sql
+> -- 完全连接：显示两张表的并集，如果其中一张表的记录
+> -- 在另一张表中没有匹配的行，则对应的数据项填充NULL
+>
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A FULL JOIN major B
+>     ON  A.学号=B.学号
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-b0ae779aafbbff6f190db1e49df46be2_b.jpg)
+>
+> ### No.5 【CROSS JOIN】交叉连接
+>
+> 结果是笛卡尔积，就是第一个表的行数乘以第二个表的行数。
+>
+> ![](./03-data-def-lang.assets/v2-37cd1d45bb26a92bd54cedf7e8976692_b.jpg)
+>
+> ```sql
+> -- 交叉连接：一张表中的数据依次取出分别与另一张表中的
+> -- 每条数据挨个组合，最后记录数量为两张表记录数的乘积
+>
+> SELECT * FROM student CROSS JOIN major
+>
+> -- 本例student和major都为7条记录，所以结果为7*7=49条记录
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-dd567fe9dcef9e2a77cb14cd6054c329_b.gif)
+>
+> ### No.6 延伸【Left Excluding JOIN】左表唯一
+>
+> 返回左表有但右表没有关联数据的记录。
+>
+> ![](./03-data-def-lang.assets/v2-abb0f5bded6807eaa5b762295c49c98a_b.jpg)
+>
+> ```sql
+> -- 左表唯一：将右表B以及两张表交集的部分过滤掉，
+> -- 得到的记录是左表中唯一存在的。
+>
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A LEFT JOIN major B
+>     ON A.学号 = B.学号
+>     WHERE B.学号 IS NULL
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-81e4dca8a00fdb2d5ab098fa7ba3c937_b.jpg)
+>
+> ### No.7 延伸【Right Excluding JOIN】右表唯一
+>
+> 返回右表有但左表没有关联数据的记录。
+>
+> ![](./03-data-def-lang.assets/v2-4849376878695b13b49d68865129dd54_b.jpg)
+>
+> ```sql
+> -- 右表唯一：将左表A以及两张表交集的部分过滤掉，
+> -- 得到的记录是右表中唯一存在的。
+>
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A RIGHT JOIN major B
+>     ON A.学号=B.学号
+>     WHERE A.学号 IS NULL
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-87c786f950a2100890213b8fd39d0c8f_b.jpg)
+>
+> ### No.8 延伸【Outer Excluding JOIN】非交集连接
+>
+> 返回左表和右表里没有相互关联的记录。
+>
+> ![](./03-data-def-lang.assets/v2-71302c7e76d8ca0024b61e1d7f69599c_b.jpg)
+>
+> ```sql
+> -- 非交集连接：查找两张表中没有关联的记录项。
+>
+> SELECT A.学号, A.姓名, A.籍贯, A.年龄, B.专业, B.班级
+>     FROM student A FULL JOIN major B
+>     ON A.学号=B.学号
+>     WHERE A.学号 IS NULL OR B.学号 IS NULL
+> ```
+>
+> ![](./03-data-def-lang.assets/v2-f2db0119f733caca27695cce19650003_b.jpg)
+>
+> ### 最后
+>
+> 谈及 SQL 里的各种 JOIN 之间的区别时，被广为引用的是 CodeProject 上 C.L. Moffatt 的文章, 本文也有所参考，感兴趣的小伙伴可以去看一下。
+>
+> [https://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins](https://link.zhihu.com/?target=https%3A//www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins)
+
+## 子查询
+
+在 WHERE 子句中包含一个形如 SELECT-FROM-WHERE 的查询块，此查询块称为子查询或嵌套查询，包含子查询的语句称为父查询或外部查询。嵌套查询可以将一系列简单查询构成复杂查询，增强查询能力。子查询的嵌套层次最多可达到 255 层，以层层嵌套的方式构造查询，充分体现了 SQL“结构化”的特点。
+
+嵌套查询在执行时由里向外处理，每个子查询是在上一级外部查询处理之前完成的，父查询要用到子查询的结果。
+
+### 普通子查询
+
+普通子查询的执行顺序是：首先执行子查询，然后把子查询的结果作为父查询的查询条件的值。普通子查询只执行一次，而父查询所涉及的所有记录行都与其查询结果进行比较以确定查询结果集合。
+
+当子查询的返回值只有一个时，可以使用比较运算符（=、 >、 <、 >=、 <=、 !=）将父查询和子查询连接起来。如：
+
+```sql
+-- 查询与“刘伟”老师职称相同的教师号、姓名。
+SELECT TNo,TN FROM T
+	WHERE Prof= (SELECT Prof FROM T WHERE TN='刘伟')
+
+-- 查询结果：
+-- TNo TN
+-- T2 王平
+-- T3 刘伟
+```
+
+如果子查询的返回值不止一个，而是一个集合时，则不能直接使用比较运算符，可以在比较运算符和子查询之间插入 ANY 或 ALL。其具体含义详见以下各例。
+
+（1）使用 ANY。
+
+```sql
+-- 查询讲授课程号为 C5 的教师姓名。
+SELECT TN FROM T
+	WHERE (TNo = ANY(SELECT TNo FROM TC WHERE CNo = 'C5') )
+```
+
+先执行子查询，找到讲授课程号为 C5 的教师号，教师号为一组值构成的集合(T2,T3,T5)；再执行父查询。其中 ANY 的含义为任意一个，查询教师号为 T2、T3、T5 的教师的姓名。查询结果如下：
+
+| TN   |
+| ---- |
+| 王平 |
+| 刘伟 |
+| 张兰 |
+
+该例也可以使用前面所讲的连接操作来实现：
+
+```sql
+SELECT T.TN FROM T,TC
+	WHERE T.TNo = TC.TNo AND TC.CNo= 'C5'
+```
+
+可见，对于同一查询，可使用子查询和连接查询两种方法来解决，读者可根据习惯任意选用。
+
+又如：
+
+```sql
+-- 查询其他系中比计算机系某一教师工资高的教师的姓名和工资。
+SELECT TN, Sal FROM T
+	WHERE (Sal > ANY(SELECT Sal FROM T WHERE Dept = ' 计算机'))
+	AND (Dept <> '计算机') -- <> 代表不等于
+```
+
+先执行子查询，找到计算机系中所有教师的工资集合（1500，900）；再执行父查询，查询所有不是计算机系且工资高于 900 元的教师姓名和工资。
+
+查询结果如下：
+
+| TN   | Sal  |
+| ---- | ---- |
+| 张雪 | 1600 |
+| 张兰 | 1300 |
+
+此查询也可以写成：
+
+```sql
+SELECT TN, Sal FROM T
+	WHERE Sal > (SELECT MIN(Sal) FROM T WHERE Dept = '计算机')
+	AND Dept <> '计算机'
+```
+
+先执行子查询，利用库函数 MIN 找到计算机系中所有教师的最低工资 900 元；再执行父查询，查询所有不是计算机系且工资高于 900 元的教师。
+
+（2）使用 IN。可以使用 IN 代替“=ANY”。
+
+```sql
+-- 查询讲授课程号为 C5 的教师姓名（使用 IN）。
+SELECT TN FROM T
+	WHERE (TNo IN (SELECT TNo FROM TC WHERE CNo = 'C5'))
+```
+
+（3）使用 ALL。ALL 的含义为全部。
+
+如：
+
+```sql
+-- 查询其他系中比计算机系所有教师工资都高的教师的姓名和工资。
+SELECT TN, Sal FROM T
+	WHERE (Sal > ALL(SELECT Sal FROM T WHERE Dept='计算机') )
+	AND (Dept <> '计算机')
+```
+
+子查询找到计算机系中所有教师的工资集合(1500，900)，父查询找到所有不是计算机系且工资高于 1500 的教师姓名和工资。
+
+此查询也可以写成：
+
+```sql
+SELECT TN, Sal FROM T
+	WHERE (Sal > (SELECT MAX(Sal) FROM T WHERE Dept = '计算机'))
+	AND (Dept <> '计算机')
+```
+
+### 相关子查询
+
+有时子查询的查询条件需要引用父查询表中的属性值，我们把这类查询称为相关子查询。相关子查询的执行顺序是：首先选取父查询表中的第一行记录，内部的子查询利用此行中相关的属性值进行查询，然后父查询根据子查询返回的结果判断此行是否满足查询条件。如果满足条件，则把该行放入父查询的查询结果集合中。重复执行这一过程，直到处理完父查询表中的每一行数据。
+
+如：
+
+```sql
+-- 查询不讲授课程号为 C5 的教师姓名。
+SELECT DISTINCT TN FROM T
+	WHERE ('C5' <> ALL(SELECT CNo FROM TC WHERE TNo = T.TNo))
+-- <> ALL 的含义为不等于子查询结果中的任何一个值。也可使用 NOT IN 代替。
+```
+
+此外，使用 EXISTS 也可以进行相关子查询。EXISTS 是表示存在的量词，带有 EXISTS 的子查询不返回任何实际数据，它只得到逻辑值“真”或“假”。当子查询的查询结果集合为非空时，外层的 WHERE 子句返回真值，否则返回假值。NOT EXISTS 与此相反。
+
+```sql
+SELECT TN FROM T
+	WHERE EXISTS
+	(SELECT * FROM TC WHERE TNo = T.TNo AND CNo = 'C5')
+```
+
+当子查询 TC 表存在一行记录满足其 WHERE 子句中的条件时，父查询便得到一个 TN 值，重复执行以上过程，直到得出最后结果。
