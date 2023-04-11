@@ -1,4 +1,4 @@
-# 第 3 章 关系数据库标准语言——SQL
+# 第 3 章 关系数据库标准语言--SQL
 
 SQL 是 Structured Query Language 的缩写，中文翻译为"结构化查询语言"。它是一种标准的关系型数据库管理系统（RDBMS）的语言，用于存储、管理和检索数据。尽管它被称为查询语言，但其功能包括数据查询、数据定义、数据操纵和数据控制四部分。
 
@@ -47,14 +47,10 @@ SQL 是 Structured Query Language 的缩写，中文翻译为"结构化查询语
 DDL（Data Definition Language，数据定义语言）用来创建或者删除存储数据用的数据库以及数据库中的表等对象。DDL 包含以下几种指令。
 
 - `CREATE DATABASE`：创建新数据库
-
 - `ALTER DATABASE`：修改数据库
-
 - `CREATE TABLE`：创建新表
-
 - `ALTER TABLE`：变更（改变）数据库表
 - `DROP TABLE`：删除表
-
 - `CREATE INDEX`：创建索引（搜索键）
 - `DROP INDEX`：删除索引
 
@@ -324,6 +320,332 @@ COMMIT;
    ALTER TABLE S DROP
    	CONSTRAINT S_Prim
    ```
+
+> 参考：[看完这篇文章保证你学会 sql 的增删改 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/162696033)，有删改。
+>
+> ### 约束条件都有什么用
+>
+> - 约束是在表上强制执行的数据检验规则；
+> - 用来保证创建的表的数据完整和正确；
+> - 当表中数据有相互依赖性时，可以保护相关的数据不被删除。
+>
+> ![img](./03-data-def-lang.assets/v2-0b443b5c0a843454a10b64c1a9eea921_b.jpg)
+>
+> **主键（primary key）**：一个表格只能有一个主键，但可以是数据表中一列或多列的组合，可以是单字段主键，也可以是多字段联合主键。
+>
+> - 主键约束要求主键列的数据必须是唯一的，并且不允许为空。
+>
+> - 使用主键，能够惟一地标识表中的一条记录，并且可以结合外键来定义不同数据表之间的关系，还可以加快数据库查询的速度。
+>
+> **非空约束（not null）**：指的是字段的值不能为空：多个空值不代表重复，代表未知。
+>
+> **唯一性约束（unique）**：要求该列的值必须是唯一的。
+>
+> - 一个表中可以有多个字段声明为唯一的；
+>
+> - 唯一约束确保数据表的一列或几列不出现重复值。
+>
+> **外键（foreign key）**：用来在两个表的数据之间建立链接。
+>
+> - 一个数据表可以有一个或多个外键；
+> - 外键对应的是参照完整性，其值可以是空值，若不为空值，则每一个外键值必须等于另一个表中主键的某个值；
+> - 主表：主键所在的表；从表：外键所在的表。
+>
+> **默认约束（Default）**：指定某个字段的默认值，默认值的类型与字段类型一致。
+>
+> **自增字段（auto_increment）**，在数据库应用中，希望主键列的值自动生成：
+>
+> - 和主键结合在一起用；
+>
+> - 只能是数值类型；
+>
+> - 将其设为自动增长列，列值由系统自动生成，每次加 1；
+>
+> - 只能有一个列设为自动增长列，且该字段必须是主键的一部分。
+>
+> 可以删除的约束：非空、默认、自动增长
+>
+> 无法删除的约束：键值约束包括主键约束、唯一约束、外键约束。
+>
+> ### 建
+>
+> ```sql
+> -- 创建学生表
+> CREATE TABLE stu(
+> s_id VARCHAR(10) PRIMARY KEY,
+> s_name VARCHAR(10) NOT NULL,
+> s_age DATE NOT NULL,
+> s_sex VARCHAR(10) DEFAULT "未知");
+> -- 课程表
+> CREATE TABLE co(
+> c_id VARCHAR(10),
+> c_name VARCHAR(10) NOT NULL,
+> t_id VARCHAR(10) NOT NULL,
+> PRIMARY KEY(c_id));
+> -- 教师表
+> CREATE TABLE te(
+> t_id VARCHAR(10) PRIMARY KEY,
+> t_name VARCHAR(10) NOT NULL);
+> -- 成绩表
+> CREATE TABLE sc(
+> s_id VARCHAR(10) NOT NULL,
+> c_id VARCHAR(10) NOT NULL,
+> score INT NOT NULL);
+> ```
+>
+> ### 增
+>
+> ```sql
+> -- 学生表添加数据
+> INSERT into stu VALUES
+> ('01' , '赵雷' , '1989-01-01' , '男'),
+> ('02' , '钱电' , '1990-12-21' , '男'),
+> ('03' , '孙风' , '1990-05-20' , '男'),
+> ('04' , '李云' , '1990-08-06' , '男'),
+> ('05' , '周梅' , '1991-12-01' , '女'),
+> ('06' , '吴兰' , '1992-03-01' , '女'),
+> ('07' , '郑竹' , '1992-04-21' , '女'),
+> ('08' , '王菊' , '1990-01-20' , '女');
+> -- 课程表添加数据
+> INSERT into co VALUES
+> ('01' , '语文' , '02'),
+> ('02' , '数学' , '01'),
+> ('03' , '英语' , '03');
+> -- 教师表添加数据
+> INSERT into te VALUES
+> ('01' , '张三'),
+> ('02' , '李四'),
+> ('03' , '王五');
+> -- 课程表添加数据
+> INSERT into sc VALUES
+> ('01' , '01' , 80),
+> ('01' , '02' , 90),
+> ('01' , '03' , 99),
+> ('02' , '01' , 70),
+> ('02' , '02' , 60),
+> ('02' , '03' , 80),
+> ('03' , '01' , 80),
+> ('03' , '02' , 80),
+> ('03' , '03' , 80),
+> ('04' , '01' , 50),
+> ('04' , '02' , 30),
+> ('04' , '03' , 20),
+> ('05' , '01' , 76),
+> ('05' , '02' , 87),
+> ('06' , '01' , 31),
+> ('06' , '03' , 34),
+> ('07' , '02' , 89),
+> ('07' , '03' , 98);
+> ```
+>
+> 查看数据：
+>
+> ```sql
+> DESC stu;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-f4054a6a656589ff8593dc4a474949c5_b.jpg)
+>
+> ```sql
+> DESC co;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-8a1e0c926f0bb16219a9e092fc1cd1ea_b.jpg)
+>
+> ```sql
+> DESC te;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-6e8d0e15eb8a2f3c0f27a2c14b7b5316_b.jpg)
+>
+> 查看表的内容：
+>
+> ```sql
+> SELECT*FROM stu;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-f1325b34d7c0b933a614d591a4d08f8b_b.jpg)
+>
+> ```sql
+> SELECT*FROM co;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-0992c16b4ad58ba31df059d1d32254f7_b.jpg)
+>
+> ```sql
+> SELECT*FROM te;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-0cac00388423a7040064f413922913f3_b.png)
+>
+> ```sql
+> SELECT*FROM sc;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-5499fb732d895218230369a13b2d1834_b.jpg)
+>
+> 查看表的行数：
+>
+> ```sql
+> select count(*) from co;
+> select count(*) from sc;
+> select count(*) from stu;
+> select count(*) from te;
+> ```
+>
+> ### 删
+>
+> 删除表格（drop table）：
+>
+> ```sql
+> DROP TABLE stu;
+> DROP TABLE sc;
+> DROP TABLE co;
+> DROP TABLE te;
+> ```
+>
+> 删除字段内容：
+>
+> ```sql
+> DELETE FROM stu;
+> DELETE FROM co;
+> DELETE FROM te;
+> DELETE FROM sc;
+> ```
+>
+> ### 改
+>
+> 修改表名称：`rename`
+>
+> ```sql
+> ALTER TABLE stu rename student;
+> SHOW TABLES;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-337d4501c4cb39196d4b3949ff8ebabd_b.png)
+>
+> 修改字段类型：`modify`
+>
+> ```sql
+> ALTER TABLE student MODIFY s_id VARCHAR(50);
+> DESC student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-1ca669ca571ecee82a39c1e15a8e2332_b.jpg)
+>
+> 修改字段名称：`change`
+>
+> ```sql
+> ALTER TABLE student CHANGE s_id stu_id VARCHAR(20);
+> DESC student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-e73a9873caaca596b77f9981a557b1dc_b.jpg)
+>
+> 增加字段：`add`
+>
+> ```sql
+> ALTER TABLE student add s_weight FLOAT FIRST;
+> DESC student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-9be06cbddc9768d3fbcbcb87b02462e1_b.jpg)
+>
+> 更改字段顺序：`modify` 配合 `after/before`
+>
+> ```sql
+> ALTER TABLE student MODIFY s_weight FLOAT AFTER stu_id;
+> DESC student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-5eedb0aa0ed5ec5fa52ee8172e2b8390_b.jpg)
+>
+> 删除字段：`drop`
+>
+> ```sql
+> ALTER TABLE student DROP s_weight, MODIFY stu_id VARCHAR(100);
+> DESC student;
+> ```
+>
+> > 多个步骤是**没有先后关系**的。
+>
+> 删除和增加键值约束：drop 和 add
+>
+> 删除主键：`DROP PRIMARY KEY`
+>
+> ```sql
+> ALTER TABLE student DROP PRIMARY KEY;
+> DESC student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-9d9511475a842c5661a6b49287353481_b.jpg)
+>
+> 增加主键：`ADD PRIMARY KEY()`
+>
+> ```sql
+> ALTER TABLE student ADD PRIMARY KEY(stu_id);
+> DESC student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-f6f93f804942ab9ba77302cc42977061_b.jpg)
+>
+> 增加外键：`sc ADD FOREIGN KEY()`
+>
+> ```sql
+> ALTER TABLE sc ADD FOREIGN KEY(s_id) REFERENCES student(stu_id);
+> DESC sc;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-2c1c26a5ac7d31c8376b898be28d2964_b.jpg)
+>
+> > 怎么删除带外键的主键？
+> >
+> > ```sql
+> > ALTER TABLE student DROP PRIMARY KEY;
+> > DESC student;
+> > ```
+> >
+> > ![img](./03-data-def-lang.assets/v2-1c64c0e66995021c28dee827ed6f7435_b.png)
+> >
+> > 查找外键名称
+> >
+> > ```sql
+> > SHOW CREATE TABLE sc;
+> > ```
+> >
+> > ![img](./03-data-def-lang.assets/v2-126a9908234e5fa183e2849fa4203b04_b.png)
+> >
+> > 删除外键
+> >
+> > ```sql
+> > ALTER TABLE sc DROP FOREIGN KEY sc_ibfk_1;
+> > ```
+> >
+> > 再删除主键
+> >
+> > ```sql
+> > ALTER TABLE student DROP PRIMARY KEY;
+> > DESC student;
+> > ```
+> >
+> > ![img](./03-data-def-lang.assets/v2-b93433a2a1687e711abb08d24d7dd742_b.jpg)
+>
+> 修改唯一约束：`unique`
+>
+> ```sql
+> alter table student add unique(stu_id); -- 增加唯一约束
+> alter table student add constraint abc unique(stu_id); -- constraint：给名称
+> alter table student drop index abc; -- 删除唯一约束
+> ```
+>
+> 修改和删除数据：`update` 不加 table
+>
+> ```sql
+> UPDATE student set s_name='朱一旦' where stu_id='01';
+> SELECT * FROM student;
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-6b2b831c5e15704e051a7c61aa7596ef_b.jpg)
 
 ## 单关系（表）的数据查询
 
@@ -664,7 +986,7 @@ SELECT [ALL|DISTINCT][TOP N [PERCENT][WITH TIES]]
 >
 > 内连接通常有两种情况：
 >
-> **等值连接：**查找两个表中连接字段相等的记录。
+> **等值连接**：查找两个表中连接字段相等的记录。
 >
 > ```sql
 > -- 查询每个学生的学号、姓名、籍贯、年龄、专业、班级
@@ -692,7 +1014,7 @@ SELECT [ALL|DISTINCT][TOP N [PERCENT][WITH TIES]]
 >
 > ![](./03-data-def-lang.assets/v2-e5ad3fb64a5d33027a2615ac67026785_b.jpg)
 >
-> **自身连接：**就是和自己进行连接查询，给一张表取两个不同的别名，然后附上连接条件。
+> **自身连接**：就是和自己进行连接查询，给一张表取两个不同的别名，然后附上连接条件。
 >
 > ```sql
 > -- 要在学生表里查询与 HH 同龄且籍贯也相同的学生信息
@@ -961,3 +1283,423 @@ SELECT TN FROM T
 ```
 
 当子查询 TC 表存在一行记录满足其 WHERE 子句中的条件时，父查询便得到一个 TN 值，重复执行以上过程，直到得出最后结果。
+
+> 参考：[MySQL 子查询--再难一看就懂 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/164547826)，有删改。
+>
+> 子查询指一个查询语句嵌套在另一个查询语句内的查询。在 select 语句中先计算子查询，子查询结果作为外层另一个查询的过滤条件。
+>
+> - 标量子查询：子查询的值是固定的。
+> - 关联子查询：内层查询与外层查询是有互动的。
+>
+> 下面的例子的数据在 [Chapter 3@建](./03-data-def-lang#建) 部分有给出完整数据。此处不再给出如何创建数据，仅提供表格预览：
+>
+> - stu (student) 表格：
+>
+>   ![img](./03-data-def-lang.assets/v2-f1325b34d7c0b933a614d591a4d08f8b_b-1681131788800-1.jpg)
+>
+> - sc (score) 表格：
+>
+>   ![img](./03-data-def-lang.assets/v2-5499fb732d895218230369a13b2d1834_b-1681131788801-3.jpg)
+>
+> - co (course) 表格：
+>
+>   ![img](./03-data-def-lang.assets/v2-0992c16b4ad58ba31df059d1d32254f7_b-1681131788801-5.jpg)
+>
+> - te (teacher) 表格：
+>
+> ![img](./03-data-def-lang.assets/v2-0cac00388423a7040064f413922913f3_b-1681131788801-7.png)
+>
+> ### 1. 查询比学生编号为 02 的学生的最高成绩都高的成绩信息
+>
+> 1. 查询结果：成绩信息，sc 表所有字段信息
+> 2. 查询条件：比学生编号为 02 的学生的最高成绩都高
+> 3. 思路：先找到 02 的学生的最高成绩作为子查询，然后用“>”与子查询连接
+>
+> ```sql
+> SELECT * FROM sc
+> 	WHERE score > (SELECT MAX(score) FROM sc WHERE s_id='02');
+> ```
+>
+> ![img](./03-data-def-lang.assets/v2-fe047ca129fa4a79b9769e7af0d12cbe_b.jpg)
+>
+> ### 2. 查询平均成绩大于等于 85 的所有学生的学号、姓名和平均成绩
+>
+> 1. 查询结果：所有学生的学号、姓名和平均成绩
+> 2. 连接：所有学生、成绩所以是 stu 表作为左表，与 sc 表进行左连接
+> 3. 查询条件：平均成绩大于等于 85
+> 4. 思路：平均成绩大于等于 85 的学生，要先找到符合条件的学生学号，然后再通过匹配学号找到这些学生的信息。首先学生的平均成绩肯定是要按学号分组，分组后用 having 条件找到平均成绩>=85 的**学生学号**作为子查询。
+>
+> ```sql
+> SELECT
+> 	stu.s_id,
+> 	stu.s_name,
+> 	AVG( sc.score ) AS avgscore
+> FROM
+> 	stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> GROUP BY
+> 	stu.s_id
+> HAVING
+> 	AVG( sc.score ) >= 85;
+> ```
+>
+> ![image-20230410211920338](./03-data-def-lang.assets/image-20230410211920338.png)
+>
+> ### 3. 查询选修了全部课程的学生信息：
+>
+> 1. 查询结果：学生信息
+> 2. 连接：学生、成绩及全部课程所以是 stu 表作为左表，与 sc 和 co 进行内连接
+> 3. 查询条件：选修了全部课程
+> 4. 思路：先想到全部课程数量是多少（通过 co 表计算课程总数量）；选修了全部课程，意思是每个学生所修不同课程的数量与全部课程的数量相同（因为出现“每个”所以要分组，针对每个学生的课程数量进行计算所以用 having 后加条件）
+>
+> ```sql
+> SELECT
+> 	stu.*
+> FROM
+> 	stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> 	JOIN co ON sc.c_id = co.c_id
+> GROUP BY
+> 	stu.s_id
+> HAVING
+> 	COUNT(sc.c_id) = (SELECT COUNT(DISTINCT co.c_id) FROM co);
+> ```
+>
+> ![image-20230410212117703](./03-data-def-lang.assets/image-20230410212117703.png)
+>
+> ### 4. 按平均成绩从高到低显示所有学生的所有课程的成绩以及平均成绩
+>
+> 1. 查询结果：所有学生、所有课程、所有成绩以及平均成绩
+> 2. 连接：所有学生、成绩及全部课程所以是 stu 表作为左表，与 sc 进行左连接
+> 3. 查询条件：所有课程的成绩以及平均成绩
+> 4. 排序：按平均成绩从高到低，降序
+> 5. 思路：因为要同时显示成绩和平均成绩，而平均是聚合函数平均成绩是通过学号分组得来的，行数是不同的；如果想同时显示的，子查询作为子表通过学号与需要显示的其他信息进行连接。**注意：作为子表时一定要给别名。**
+>
+> ```sql
+> SELECT stu.s_name, co.c_name, sc.score, a.avgscore
+> FROM stu
+> 	LEFT JOIN sc
+> 	ON stu.s_id = sc.s_id
+> 	LEFT JOIN (
+> 		SELECT sc.s_id, AVG(sc.score) AS avgscore
+> 		FROM sc
+> 		GROUP BY sc.s_id
+> 	) AS a
+> 	ON sc.s_id = a.s_id
+> 	LEFT JOIN co
+> 	ON sc.c_id = co.c_id
+> ORDER BY
+> 	a.avgscore DESC;
+> ```
+>
+> ![image-20230410212546416](./03-data-def-lang.assets/image-20230410212546416.png)
+>
+> ### 5. 查询没学过“张三”老师授课的同学的信息；
+>
+> 1. 查询结果：学生信息，主要是 stu 表信息
+> 2. 连接：子查询时用到连接，学生、教师名字，所以是 stu 表作为左表，与 sc、co 和 te 进行内连接
+> 3. 查询条件：没学过“张三”老师授课
+> 4. 思路：先找到学过张三老师授课的学生学号作为子查询，通过 where s_id not in + 子查询进行筛选
+>
+> ```sql
+> SELECT * FROM stu
+> WHERE s_id NOT IN (
+> 	SELECT stu.s_id FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id
+> 		JOIN co ON sc.c_id = co.c_id
+> 		JOIN te ON co.t_id = te.t_id
+> 	WHERE
+> 		te.t_name = '张三'
+> 	GROUP BY stu.s_id );
+> ```
+>
+> ![image-20230410213050800](./03-data-def-lang.assets/image-20230410213050800.png)
+>
+> ### 6. 查询至少有一门课与学号为“01”的同学所学相同的同学的信息
+>
+> 1. 查询结果：学生信息，主要是 stu 表信息
+> 2. 连接：学生、课程号，所以是 stu 表作为左表，与 sc 进行内连接
+> 3. 查询条件：至少有一门课与学号为“01”的同学所学相同
+> 4. 思路：先找到学号为“01”的同学所学课程，只要其他同学课程与 1 号同学所学任一课程相同就符合条件。
+>
+> **方法一**：
+>
+> ```sql
+> SELECT stu.* FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> WHERE
+> 	c_id = ANY ( SELECT c_id FROM sc WHERE s_id = '01' )
+> GROUP BY
+> 	stu.s_id;
+> ```
+>
+> **方法二**：通过课程号只要在 1 号同学所学课程里的学号进行筛选。
+>
+> ```sql
+> SELECT *
+> FROM stu
+> WHERE
+> 	s_id IN (
+> 		SELECT s_id FROM sc
+> 		WHERE c_id IN ( SELECT c_id FROM sc WHERE s_id = "01" )
+> 	);
+> ```
+>
+> ![image-20230410213332853](./03-data-def-lang.assets/image-20230410213332853.png)
+>
+> ### 7. 查询学过编号为“01”并且也学过编号为“02”的课程的同学的信息
+>
+> 1. 查询结果：学生信息，主要是 stu 表信息
+> 2. 连接：学生、课程号，所以是 stu 表作为左表，与 sc 进行内连接
+> 3. 查询条件：学过编号为“01”并且也学过编号为“02”的课程
+>
+> **方法一**：通过 `having sum(c_id='01')` 来实现
+>
+> ```sql
+> SELECT stu.*
+> FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> GROUP BY stu.s_id
+> HAVING SUM( c_id = '01' ) AND SUM( c_id = '02' );
+> -- SUM() 输出包含条件的行数，没有就返回 0，也就是否定的意思。只有两者的 SUM() 都大于等于 1，才能允许被输出
+> ```
+>
+> **方法二**：找到学过 01 课程和 02 课程的学号，通过 where+学号+子查询来筛选
+>
+> ```sql
+> SELECT * FROM stu
+> WHERE
+> 	s_id IN ( SELECT s_id FROM sc WHERE c_id = '01' )
+> 	AND s_id IN ( SELECT s_id FROM sc WHERE c_id = '02' );
+> ```
+>
+> ![image-20230410215859051](./03-data-def-lang.assets/image-20230410215859051.png)
+>
+> ### 8. 查询“01”课程比“02”课程成绩高的学生的信息及课程分数
+>
+> 1. 查询结果：学生信息，主要是 stu 表信息及课程分数
+> 2. 连接：学生、课程号，所以是 stu 表作为左表，与 sc 进行内连接
+> 3. 查询条件：“01”课程比“02”课程成绩高的学生
+>
+> **方法一**：通过 `having SUM((c_id='01')*score)>SUM((c_id='02')*score)` 来实现，但前提是两个课程都存在通过此代码证实存在 `SUM(c_id='01')>0 AND SUM(c_id='02')>0`
+>
+> ```sql
+> SELECT stu.*, sc.c_id, sc.score FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> WHERE stu.s_id IN (
+> 	SELECT stu.s_id FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id
+> 	GROUP BY stu.s_id
+> 	HAVING
+> 		SUM( c_id = '01' ) > 0 AND SUM( c_id = '02' ) > 0
+> 		AND SUM(( c_id = '01' ) * score ) > SUM(( c_id = '02' ) * score )
+> 	);
+> ```
+>
+> **方法二**：找到 01 和 02 课程的成绩信息，分别作为子表与 stu 表通过学号和课程号=`'01'/'02'` 进行连接，通过 where+子查询 `sc.score>sc2.score` 来筛选。最后将筛选出的学号作为子查询，找出学生信息及成绩。
+>
+> ```sql
+> SELECT stu.*, sc.c_id, sc.score FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> WHERE
+> 	stu.s_id IN (
+> 	SELECT stu.s_id FROM stu
+> 		JOIN sc AS sc01 ON stu.s_id = sc01.s_id AND sc01.c_id = '01'
+> 		JOIN sc AS sc02 ON stu.s_id = sc02.s_id AND sc02.c_id = '02'
+> 	WHERE sc01.score > sc02.score
+> 	);
+> ```
+>
+> ![image-20230410221651601](./03-data-def-lang.assets/image-20230410221651601.png)
+>
+> ### 9. 查询学过编号为“01”但是没有学过编号为“02”的课程的同学的信息
+>
+> 与 7 题大同小异。
+>
+> **方法一**：
+>
+> ```sql
+> SELECT stu.* FROM stu
+> JOIN sc ON stu.s_id = sc.s_id
+> GROUP BY stu.s_id
+> HAVING SUM(c_id='01') > 0 AND SUM(c_id='02') = 0;
+> ```
+>
+> **方法二**：
+>
+> ```sql
+> SELECT * FROM stu
+> WHERE s_id in (SELECT s_id FROM sc WHERE c_id='01')
+> 	AND s_id not in (SELECT s_id FROM sc WHERE c_id='02');
+> ```
+>
+> ![image-20230410222421561](./03-data-def-lang.assets/image-20230410222421561.png)
+>
+> ### 10. 查询有一门课程成绩在 70 分以上的姓名、课程名称和分数
+>
+> 1. 查询结果：姓名、课程名称和分数
+> 2. 连接：学生姓名、课程名称、分数，所以是 stu 表作为左表，与 sc 和 co 表进行内连接
+> 3. 查询条件：有一门课程成绩在 70 分以上的学生
+>
+> **方法一**：通过 `HAVING SUM(score>70)>0` 找到符合条件的学号，然后通过 s_id+in+(子查询实现)
+>
+> ```sql
+> SELECT s_name, c_name, score FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> 	JOIN co ON sc.c_id = co.c_id
+> GROUP BY stu.s_id
+> HAVING SUM( score > 70 ) > 0;
+> ```
+>
+> **方法二**：只要最大成绩大于 70 分则存在大于 70 分的课程找到学号，再通过 `s_id in (子查询)` 实现。
+>
+> ```sql
+> SELECT s_name, c_name, score
+> FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> 	JOIN co ON sc.c_id = co.c_id
+> WHERE stu.s_id IN (
+> 	SELECT s_id FROM sc
+> 	GROUP BY s_id
+> 	HAVING MAX( score )> 70 );
+> ```
+>
+> ![image-20230411081058115](./03-data-def-lang.assets/image-20230411081058115.png)
+>
+> ### 11. 查询选修“张三”老师所授课程的学生中，成绩最高的学生信息及其成绩
+>
+> 1. 查询结果：学生信息和成绩
+> 2. 连接：学生姓名、课程名称、分数，所以是 stu 表作为左表，与 sc、co 及 te 表进行内连接
+> 3. 查询条件：选修“张三”老师所授课程的学生中，成绩最高的学生
+> 4. 思路：条件一选修张三老师的课程，`where t_name='张三'`；条件二成绩最高；通过 score=最高成绩子查询而且`where t_name='张三'`来实现。
+>
+> ```sql
+> SELECT stu.*, sc.score FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id
+> 	JOIN co ON sc.c_id = co.c_id
+> 	JOIN te ON co.t_id = te.t_id
+> WHERE t_name = '张三' AND score = (
+> 	SELECT MAX( score )
+> 	FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id
+> 		JOIN co ON sc.c_id = co.c_id
+> 		JOIN te ON co.t_id = te.t_id
+> 	WHERE t_name = '张三'
+> 	);
+> ```
+>
+> ![image-20230411085816293](./03-data-def-lang.assets/image-20230411085816293.png)
+>
+> ### 12. 查询每门课程的成绩第 2 名到第 3 名的学生信息及该课程成绩
+>
+> 1. 查询结果：学生信息和成绩
+> 2. 连接：学生姓名、课程名称、分数，所以是 stu 表作为左表，与 sc 表进行内连接
+> 3. 查询条件：每门课程的成绩第 2 名到第 3 名的学生
+>
+> **方法一**：窗口函数实现，`row_number() over((PARTITION by c_id ORDER BY score DESC)`计算出排名列，然后通过 where+in(2,3) 实现
+>
+> ```sql
+> SELECT a.* FROM (
+> 	SELECT stu.*, sc.c_id, sc.score,
+> 		ROW_NUMBER() over ( PARTITION BY c_id ORDER BY score DESC ) AS ranks
+> 	FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id
+> 	) AS a
+> WHERE
+> 	ranks IN ( 2, 3 );
+> ```
+>
+> > [SQL数据分析-窗口函数 ROW_NUMBER() - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/353144510)
+> >
+> > SQL 中有一类函数叫聚合函数，比如 `count`、`sum`、`avg`、`min`数据按照规整聚集为一行，一般聚集前的数据行要大于聚集后的数据行。
+> >
+> > 而有时候我们不仅想要聚集前的数据，又想要聚集后的数据，这时候便引入了**窗口函数**。涉及知识点有**用于排序的窗口函数、用于用户分组查询的窗口函数、用于偏移分析的窗口函数**。
+> >
+> > ### row_number 函数
+> >
+> > 作用：分组聚合，先分组在进行排序。
+> >
+> > 使用方法：`row_number() over(partition by 列名1 order by 列名2 desc)`
+> >
+> > 表示根据 **列名 1** 分组，然后在分组内部根据 **列名 2** 排序，而此函数计算的值就表示每组内部排序后的顺序编号,可以用于去重复值。
+>
+> **方法二**：关联子查询：两个 sc 表通过 c_id 相同进行连接，然后再用 `SUM(sc.score<score)` 进行筛选
+>
+> ```sql
+> SELECT stu.*, sc.c_id, sc.score FROM sc
+> 	JOIN stu ON stu.s_id = sc.s_id
+> WHERE (
+> 	SELECT SUM( sc.score < sc1.score )
+> 	FROM sc AS sc1 WHERE sc1.c_id = sc.c_id 
+> 	)
+> 	IN ( 1, 2 );
+> ```
+>
+> 代码意思：相同课程，找到sc1成绩比sc成绩大的学号数量，然后得到排序列。以1号课程为例，遍历每个学号，找到比这个学号成绩高的学生的数量再加1就是排名。
+>
+> 这是1号课程的所有学生的成绩：
+>
+> ![img](./03-data-def-lang.assets/v2-1e630593e9c853f60de89cbc8d740e3a_b.png)
+>
+> - sc表第一行成绩为80的学生表（无色行），到sc1表中找没有比80大的，所以排名是0；
+> - sc表第二行成绩为70的学生表（浅黄色行），到sc1表中有3个比70大的（深黄色行），所以排名是3；
+> - sc表第四行成绩为50的学生表（浅绿色行），到sc1表中有4个比50大的（深绿色行），所以排名是4；
+> - sc表第五行成绩为76的学生表（浅蓝色行），到sc1表中有2个比76大的（深蓝色行），所以排名是2；
+> - sc表第六行成绩为50的学生表（浅灰色行），到sc1表中有5个比31大的（深灰色行），所以排名是5；
+>
+> 因为排名是从0开始的，所以最后（2，3）名变成 in（1，2）最大的排前面属于降序。如果`SUM(sc.score<score)`变成大于号就从sc1中找到成绩小于sc表成绩的学生数量。
+>
+> **方法三**：都各自查出来，再纵向连接（最笨的方法）
+>
+> ```sql
+> ( SELECT stu.*, sc.score FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id 
+> 	WHERE c_id = '01'
+> 	ORDER BY score DESC
+> 		LIMIT 1, 2
+> ) UNION
+> ( SELECT stu.*, sc.score FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id 
+> 	WHERE c_id = '02'
+> 	ORDER BY score DESC
+> 		LIMIT 1, 2 
+> ) UNION
+> ( SELECT stu.*, sc.score FROM stu
+> 		JOIN sc ON stu.s_id = sc.s_id 
+> 	WHERE c_id = '03' 
+> 	ORDER BY score DESC 
+> 		LIMIT 1, 2
+> );
+> ```
+>
+> ![image-20230411085842211](./03-data-def-lang.assets/image-20230411085842211.png)
+>
+> ### 13. 按各科成绩进行排序，并显示排名
+>
+> 与12题一样。
+>
+> **方法一**：窗口函数
+>
+> ```sql
+> SELECT stu.s_name, sc.c_id, sc.score,
+> 	RANK() over ( PARTITION BY sc.c_id ORDER BY sc.score ) AS ranks
+> FROM stu
+> 	JOIN sc ON stu.s_id = sc.s_id;
+> ```
+>
+> **方法二**：关联子查询
+>
+> ```sql
+> SELECT stu.s_name, sc.c_id, sc.score,
+> 	(
+> 		SELECT SUM( sc.score < sc1.score )
+> 		FROM sc AS sc1
+> 		WHERE sc.c_id = sc1.c_id
+> 	) + 1 AS ranks 
+> FROM sc 
+> 	JOIN stu ON sc.s_id = stu.s_id
+> ORDER BY c_id, ranks;
+> ```
+>
+> ![image-20230411090307961](./03-data-def-lang.assets/image-20230411090307961.png)
+
