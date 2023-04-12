@@ -236,10 +236,9 @@ COMMIT;
    CONSTRAINT (约束名) FOREIGN KEY REFERENCES <主表名>(<列名>[{,<列名>}])
    ```
 
-   如：
+   如：建立一个 SC 表，定义 SNo、CNo 为 SC 的外部键。
 
    ```sql
-   -- 建立一个 SC 表，定义 SNo、CNo 为 SC 的外部键。
    CREATE TABLE SC(
    	SNo VARCHAR(6) NOT NULL CONSTRAINT S_Fore
        	FOREIGN KEY REFERENCES S(SNo),
@@ -248,7 +247,7 @@ COMMIT;
    	Score NUMERIC(4,1),
    	CONSTRAINT S_C_Prim PRIMARY KEY(SNo, CNo));
    ```
-
+   
 5. **CHECK 约束**
 
    CHECK 约束用来检查字段值所允许的范围，如一个字段只能输入整数，而且限定在 0 ～ 100 的整数，以此来保证域的完整性。
@@ -285,38 +284,35 @@ COMMIT;
 
 1. ADD 方式
 
-   如：
+   如：在 S 表中增加一个班号列和住址列。
 
    ```sql
-   -- 在 S 表中增加一个班号列和住址列。
    ALTER TABLE S ADD
        Class_No VARCHAR(6),
        Address NVARCHAR(20);
    ```
-
+   
 2. ALTER 方式
 
-   如：
+   如：把 S 表中的 SN 列加宽到 12 个字符。
 
    ```sql
-   -- 把 S 表中的 SN 列加宽到 12 个字符。
    ALTER TABLE S ALTER
    	COLUMN SN NVARCHAR(12)
    ```
-
+   
    注意：使用此方式有如下一些限制：
-
+   
    - 不能改变列名。
    - 不能将含有空值的列的定义修改为 NOT NULL 约束。
    - 若列中已有数据，则不能减少该列的宽度，也不能改变其数据类型。
    - 只能修改 NULL/NOT NULL 约束，其他类型的约束在修改之前必须先将约束删除，然后再重新添加修改过的约束定义。
-
+   
 3. DROP 方式
 
-   如：
+   如：删除 S 表中的主键。
 
    ```sql
-   -- 删除 S 表中的主键。
    ALTER TABLE S DROP
    	CONSTRAINT S_Prim
    ```
@@ -1164,10 +1160,11 @@ SELECT [ALL|DISTINCT][TOP N [PERCENT][WITH TIES]]
 
 普通子查询的执行顺序是：首先执行子查询，然后把子查询的结果作为父查询的查询条件的值。普通子查询只执行一次，而父查询所涉及的所有记录行都与其查询结果进行比较以确定查询结果集合。
 
-当子查询的返回值只有一个时，可以使用比较运算符（=、 >、 <、 >=、 <=、 !=）将父查询和子查询连接起来。如：
+当子查询的返回值只有一个时，可以使用比较运算符（=、 >、 <、 >=、 <=、 !=）将父查询和子查询连接起来。
+
+如：查询与“刘伟”老师职称相同的教师号、姓名。
 
 ```sql
--- 查询与“刘伟”老师职称相同的教师号、姓名。
 SELECT TNo,TN FROM T
 	WHERE Prof= (SELECT Prof FROM T WHERE TN='刘伟')
 
@@ -1204,10 +1201,9 @@ SELECT T.TN FROM T,TC
 
 可见，对于同一查询，可使用子查询和连接查询两种方法来解决，读者可根据习惯任意选用。
 
-又如：
+又如：查询其他系中比计算机系某一教师工资高的教师的姓名和工资。
 
 ```sql
--- 查询其他系中比计算机系某一教师工资高的教师的姓名和工资。
 SELECT TN, Sal FROM T
 	WHERE (Sal > ANY(SELECT Sal FROM T WHERE Dept = ' 计算机'))
 	AND (Dept <> '计算机') -- <> 代表不等于
@@ -1242,10 +1238,9 @@ SELECT TN FROM T
 
 （3）使用 ALL。ALL 的含义为全部。
 
-如：
+如：查询其他系中比计算机系所有教师工资都高的教师的姓名和工资。
 
 ```sql
--- 查询其他系中比计算机系所有教师工资都高的教师的姓名和工资。
 SELECT TN, Sal FROM T
 	WHERE (Sal > ALL(SELECT Sal FROM T WHERE Dept='计算机') )
 	AND (Dept <> '计算机')
@@ -1265,10 +1260,9 @@ SELECT TN, Sal FROM T
 
 有时子查询的查询条件需要引用父查询表中的属性值，我们把这类查询称为相关子查询。相关子查询的执行顺序是：首先选取父查询表中的第一行记录，内部的子查询利用此行中相关的属性值进行查询，然后父查询根据子查询返回的结果判断此行是否满足查询条件。如果满足条件，则把该行放入父查询的查询结果集合中。重复执行这一过程，直到处理完父查询表中的每一行数据。
 
-如：
+如：查询不讲授课程号为 C5 的教师姓名。
 
 ```sql
--- 查询不讲授课程号为 C5 的教师姓名。
 SELECT DISTINCT TN FROM T
 	WHERE ('C5' <> ALL(SELECT CNo FROM TC WHERE TNo = T.TNo))
 -- <> ALL 的含义为不等于子查询结果中的任何一个值。也可使用 NOT IN 代替。
@@ -1609,7 +1603,7 @@ SELECT TN FROM T
 > 	ranks IN ( 2, 3 );
 > ```
 >
-> > [SQL数据分析-窗口函数 ROW_NUMBER() - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/353144510)
+> > [SQL 数据分析-窗口函数 ROW_NUMBER() - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/353144510)
 > >
 > > SQL 中有一类函数叫聚合函数，比如 `count`、`sum`、`avg`、`min`数据按照规整聚集为一行，一般聚集前的数据行要大于聚集后的数据行。
 > >
@@ -1630,44 +1624,44 @@ SELECT TN FROM T
 > 	JOIN stu ON stu.s_id = sc.s_id
 > WHERE (
 > 	SELECT SUM( sc.score < sc1.score )
-> 	FROM sc AS sc1 WHERE sc1.c_id = sc.c_id 
+> 	FROM sc AS sc1 WHERE sc1.c_id = sc.c_id
 > 	)
 > 	IN ( 1, 2 );
 > ```
 >
-> 代码意思：相同课程，找到sc1成绩比sc成绩大的学号数量，然后得到排序列。以1号课程为例，遍历每个学号，找到比这个学号成绩高的学生的数量再加1就是排名。
+> 代码意思：相同课程，找到 sc1 成绩比 sc 成绩大的学号数量，然后得到排序列。以 1 号课程为例，遍历每个学号，找到比这个学号成绩高的学生的数量再加 1 就是排名。
 >
-> 这是1号课程的所有学生的成绩：
+> 这是 1 号课程的所有学生的成绩：
 >
 > ![img](./03-data-def-lang.assets/v2-1e630593e9c853f60de89cbc8d740e3a_b.png)
 >
-> - sc表第一行成绩为80的学生表（无色行），到sc1表中找没有比80大的，所以排名是0；
-> - sc表第二行成绩为70的学生表（浅黄色行），到sc1表中有3个比70大的（深黄色行），所以排名是3；
-> - sc表第四行成绩为50的学生表（浅绿色行），到sc1表中有4个比50大的（深绿色行），所以排名是4；
-> - sc表第五行成绩为76的学生表（浅蓝色行），到sc1表中有2个比76大的（深蓝色行），所以排名是2；
-> - sc表第六行成绩为50的学生表（浅灰色行），到sc1表中有5个比31大的（深灰色行），所以排名是5；
+> - sc 表第一行成绩为 80 的学生表（无色行），到 sc1 表中找没有比 80 大的，所以排名是 0；
+> - sc 表第二行成绩为 70 的学生表（浅黄色行），到 sc1 表中有 3 个比 70 大的（深黄色行），所以排名是 3；
+> - sc 表第四行成绩为 50 的学生表（浅绿色行），到 sc1 表中有 4 个比 50 大的（深绿色行），所以排名是 4；
+> - sc 表第五行成绩为 76 的学生表（浅蓝色行），到 sc1 表中有 2 个比 76 大的（深蓝色行），所以排名是 2；
+> - sc 表第六行成绩为 50 的学生表（浅灰色行），到 sc1 表中有 5 个比 31 大的（深灰色行），所以排名是 5；
 >
-> 因为排名是从0开始的，所以最后（2，3）名变成 in（1，2）最大的排前面属于降序。如果`SUM(sc.score<score)`变成大于号就从sc1中找到成绩小于sc表成绩的学生数量。
+> 因为排名是从 0 开始的，所以最后（2，3）名变成 in（1，2）最大的排前面属于降序。如果`SUM(sc.score<score)`变成大于号就从 sc1 中找到成绩小于 sc 表成绩的学生数量。
 >
 > **方法三**：都各自查出来，再纵向连接（最笨的方法）
 >
 > ```sql
 > ( SELECT stu.*, sc.score FROM stu
-> 		JOIN sc ON stu.s_id = sc.s_id 
+> 		JOIN sc ON stu.s_id = sc.s_id
 > 	WHERE c_id = '01'
 > 	ORDER BY score DESC
 > 		LIMIT 1, 2
 > ) UNION
 > ( SELECT stu.*, sc.score FROM stu
-> 		JOIN sc ON stu.s_id = sc.s_id 
+> 		JOIN sc ON stu.s_id = sc.s_id
 > 	WHERE c_id = '02'
 > 	ORDER BY score DESC
-> 		LIMIT 1, 2 
+> 		LIMIT 1, 2
 > ) UNION
 > ( SELECT stu.*, sc.score FROM stu
-> 		JOIN sc ON stu.s_id = sc.s_id 
-> 	WHERE c_id = '03' 
-> 	ORDER BY score DESC 
+> 		JOIN sc ON stu.s_id = sc.s_id
+> 	WHERE c_id = '03'
+> 	ORDER BY score DESC
 > 		LIMIT 1, 2
 > );
 > ```
@@ -1676,7 +1670,7 @@ SELECT TN FROM T
 >
 > ### 13. 按各科成绩进行排序，并显示排名
 >
-> 与12题一样。
+> 与 12 题一样。
 >
 > **方法一**：窗口函数
 >
@@ -1695,11 +1689,306 @@ SELECT TN FROM T
 > 		SELECT SUM( sc.score < sc1.score )
 > 		FROM sc AS sc1
 > 		WHERE sc.c_id = sc1.c_id
-> 	) + 1 AS ranks 
-> FROM sc 
+> 	) + 1 AS ranks
+> FROM sc
 > 	JOIN stu ON sc.s_id = stu.s_id
 > ORDER BY c_id, ranks;
 > ```
 >
 > ![image-20230411090307961](./03-data-def-lang.assets/image-20230411090307961.png)
+
+## 其他类型查询
+
+### 集合运算查询
+
+合并查询是使用 UNION 操作符将来自不同查询的数据组合起来，形成一个具有综合信息的查询结果。UNION 操作会自动将重复的数据行剔除。必须注意的是，参加合并查询的各子查询的使用的表结构应该相同，即各子查询中的数据数目和对应的数据类型都必须相同。
+
+如：从 SC 数据表中查询出学号为“S1”同学的学号和总分，再从 SC 数据表中查询出学号为“S5”的同学的学号和总分，然后将两个查询结果合并成一个结果集。
+
+```sql
+SELECT SNo AS 学号, SUM(Score) AS 总分 FROM SC
+    WHERE (SNo = 'S1')
+    GROUP BY SNo
+UNION SELECT SNo AS 学号, SUM(Score) AS 总分 FROM SC
+	WHERE (SNo = 'S5')
+	GROUP BY SNo
+```
+
+### 存储查询结果到表中
+
+使用 SELECT...INTO 语句可以将查询结果存储到一个新建的数据库表或临时表中。
+
+如：从 SC 数据表中查询出所有同学的学号和总分，并将查询结果存放到一个新的数据表 Cal_Table 中。
+
+```sql
+SELECT SNo AS 学号, SUM(Score) AS 总分
+INTO Cal_Table
+FROM SC GROUP BY SNo
+```
+
+如果在本例中，将 INTO Cal_Table 改为 INTO #Cal_Table，则查询的结果被存放到一个临时表中， 临时表只存储在内存中，并不存储在数据库中，所以其存在的时间非常短。
+
+## 数据表中数据的操纵
+
+### 添加数据表中的数据
+
+添加数据是把新的记录添加到一个已存在的表中。添加数据使用的 SQL 命令是 INSERT INTO，可分为以下几种情况。
+
+**（1）添加一行新记录。**
+
+添加一行新记录的语法格式为：
+
+```sql
+INSERT INTO <表名> (<列名 1> [,<列名 2>...]) VALUES <值>
+```
+
+其中，`<表名>` 是指要添加新记录的表，`<列名>` 是可选项，指定待添加数据的列，VALUES 子句指定待添加数据的具体值。列名的排列顺序不一定要和表定义时的顺序一致，但当指定列名时，VALUES 子句中值的排列顺序必须和列名表中的列名排列顺序一致，个数相等，数据类型一一对应。
+
+如：在 S 表中添加一条学生记录（学号：S7，姓名：郑冬，性别：女，年龄：21，系别：计算机）。
+
+```sql
+INSERT INTO S (SNo, SN, Age, Sex, Dept)
+VALUES ('S7', '郑冬', 21, '女', '计算机')
+```
+
+::: tip
+必须用逗号将各个数据分开，字符型数据要用单引号括起来。如果 INTO 子句中没有指定列名，则新添加的记录必须在每个属性列上均有值，且 VALUES 子句中值的排列顺序要和表中各属性列的排列顺序一致。
+:::
+
+**（2）添加一行记录的部分数据值。**
+
+如：在 SC 表中添加一条选课记录 `('S7', 'C1')`。
+
+```sql
+INSERT INTO SC (SNo, CNo) VALUES ('S7', 'C1')
+```
+
+将 VALUES 子句中的值按照 INTO 子句中指定列名的顺序添加到表中，对于 INTO 子句中没有出现的列，则新添加的记录在这些列上将赋 NULL 值，如上例的 Score 即赋 NULL 值。但在表定义时有 NOT NULL 约束的属性列不能取 NULL 值，插入时必须给其赋值。
+
+**(3) 添加多行记录。**
+
+添加多行记录用于表间的复制，即将一个表中的数据抽取数行添加到另一个表中，可以通过子查询来实现。
+
+如：求出各系教师的平均工资，把结果存放在新表 AvgSal 中。
+
+```sql
+-- 首先，建立新表 AvgSal，用来存放系名和各系的平均工资。
+CREATE TABLE AvgSal (
+    Department VARCHAR(20),
+    Average SMALLINT)
+
+-- 然后，利用子查询求出 T 表中各系的平均工资，把结果存放在新表 AvgSal 中。
+INSERT INTO AvgSal
+	SELECT Dept, AVG(Sal) FROM T
+	GROUP BY Dept
+```
+
+### 修改数据表中的数据
+
+可以使用 SQL 的 UPDATE 语句对表中的一行或多行记录的某些列值进行修改，其语法格式为：
+
+```sql
+UPDATE <表名>
+SET <列名>=<表达式> [,<列名>=<表达式>]... [WHERE <条件>]
+```
+
+其中，`<表名>` 是指要修改的表，SET 子句给出要修改的列及其修改后的值。WHERE 子句指定待修改的记录应当满足的条件，WHERE 子句省略时，则修改表中的所有记录。
+
+```sql
+-- （1）修改一行
+-- 把刘伟老师转到信息系。
+UPDATE T
+SET Dept = '信息' WHERE TN = '刘伟'
+
+-- （2）修改多行
+-- 将所有学生的年龄增加 1 岁。
+UPDATE S
+SET Age = Age + 1
+-- 把教师表中工资小于或等于 1000 元的讲师的工资提高 20%。
+UPDATE T
+SET Sal = 1.2 * Sal
+	WHERE ( Prof = '讲师' ) AND ( Sal <= 1000 )
+
+-- （3）用子查询选择要修改的行。
+-- 把讲授 C5 课程的教师的岗位津贴增加 100 元。
+UPDATE T
+SET Comm = Comm + 100
+	WHERE TNo IN (
+        SELECT TNo FROM T, TC
+        WHERE T.TNo = TC.TNo AND TC.CNo = 'C5')
+
+-- （4）用子查询提供要修改的值。
+-- 把所有教师的工资提高到平均工资的 1.2 倍。
+UPDATE T
+SET Sal = ( SELECT 1.2 * AVG(Sal) FROM T )
+```
+
+### 删除数据
+
+使用 SQL 的 DELETE 语句可以删除表中的一行或多行记录，其语法格式为：
+
+```sql
+DELETE FROM <表名> [WHERE <条件>]
+```
+
+其中，`<表名>` 是指要删除数据的表。WHERE 子句指定待删除的记录应当满足的条件，WHERE 子句省略时，则删除表中的所有记录。
+
+```sql
+-- （1）删除一行记录。
+-- 删除刘伟老师的记录。
+DELETE FROM T WHERE TN = '刘伟'
+
+-- （2）删除多行记录。
+-- 删除所有教师的授课记录。 
+DELETE FROM TC
+-- 执行此语句后，TC 表即为一个空表，但其定义仍存在数据字典中。
+
+-- （3）利用子查询选择要删除的行。
+-- 删除刘伟老师授课的记录。
+DELETE FROM TC
+WHERE TNo = ( SELECT TNo FROM T WHERE TN = '刘伟' )
+```
+
+## 视图
+
+视图通常用来集中、简化和自定义每个用户对数据库的不同认识。视图可用作安全机制，方法是允许用户通过视图访问数据，而不授予用户直接访问视图关联的基础表权限。视图可用于提供向后兼容接口来模拟曾经存在但其架构已更改的基础表。还可以在向 SQL Server 复制数据和从其中复 制数据时使用视图，以便提高性能并对数据进行分区。
+
+> [SQL VIEW（视图） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/80183774)
+>
+> ### 什么是视图？
+>
+> 1. 在 SQL 中，视图是基于 SQL 语句的结果集的可视化的表。视图包含行和列，就像一个真实的表。
+> 2. 视图是一种不存在的虚拟表: 类似表但是不是表。
+>
+>    - 类似表: 视图有表结构；
+>    - 不是表: 没有数据, 视图的数据来源都是基表；
+>    
+> 3. 视图中的字段是来自一个或多个数据库中的真实的表中的字段。
+>
+>    - 单表视图: 基表只有一个；
+>    - 多表视图: 基表至少两个以上；
+>
+> 4. 我们可以向视图添加 SQL 函数、WHERE 以及 JOIN 语句，我们也可以提交数据，就像这些来自于某个单一的表。
+> 5. 数据库的设计和结构不会受到视图中的函数、WHERE 或 JOIN 语句的影响。
+> 6. 视图总是显示最近的数据。每当用户查询视图时，数据库引擎通过使用 SQL 语句来重建数据。
+> 7. 可以从某个查询内部、某个存储过程内部，或者从另一个视图内部来使用视图。通过向视图添加函数、JOIN 等等，我们可以向用户精确地提交我们希望提交的数据。
+>
+> ### SQL CREATE VIEW 实例
+>
+> SQL CREATE VIEW 语法：
+>
+> ```sql
+> CREATE VIEW view_name AS
+> SELECT column_name(s) FROM table_name
+> WHERE condition
+> ```
+>
+> 实例：
+>
+> ```sql
+> -- 创建视图
+> create or replace view v_student as 
+> select Sno,Sname
+> from student;
+> 
+> -- 从视图中检索数据，即查询上面这个视图
+> select * from v_student;
+> 
+> -- 也可以向查询添加条件
+> select * 
+> from v_student
+> where Sname like '%云';
+> 
+> -- 删除视图
+> drop view v_student;
+> ```
+>
+> ### 视图的作用
+>
+> 1. 简化了操作，把**经常使用**的数据定义为视图，可以将复杂的SQL查询语句进行封装。
+>
+>    如在实际工作中，不同的人员只关注与其相关的数据，而与他无关的数据，对他没有任何意义。根据这一情况，可以专门为其创建一个视图，定制用户数据，聚焦特定的数据。此后当他查询数据时，只需 `select * from view_name;` 就可以了。
+>
+> 2. 安全性，用户只能查询和修改能看到的数据。
+>
+>    使用视图，基表中的数据就有了一定的安全性。因为视图是虚拟的，物理上是不存在的，只是存储了数据的集合，我们可以不通过视图将基表中重要的字段信息给用户。视图是动态的数据的集合，数据是随着基表的更新而更新的。同时，用户对视图，不可以随意的更改和删除，可以保证数据的安全性。
+>
+>    方便了权限管理，让用户对视图有权限而不是对底层表有权限进一步加强了安全性
+>
+> 3. 逻辑上的独立性，屏蔽了真实表的结构带来的影响。
+>
+>    视图的存在: 主要是为了对外提供数据支持(外部系统)；隐藏了基表字段(隐私)；保证了数据库的数据安全(保护数据库内部的数据结构)；可以灵活的控制对外的数据: 保证针对每个接口都有一个单独的数据支持，增强了用户友好性。
+>
+> ### 视图的缺点
+>
+> 1. 性能差
+>
+>    数据库必须把视图查询转化成对基本表的查询，如果这个视图是由一个复杂的多表查询所定义，那么即使是视图的一个简单查询，数据库也要把它变成一个复杂的结合体，需要花费一定的时间。
+>
+> 2. 修改限制
+>
+>    - 当用户试图修改视图的某些信息时，数据库必须把它转化为对基本表的某些信息的修改，对于简单的视图来说，这是很方便的，但是，对于比较复杂的试图，可能是不可修改的。
+>    - 在定义数据库对象时，不能不加选择地来定义视图，应该权衡视图的优点和缺点，合理地定义视图。
+>
+>    ::: tip 对视图的修改
+>
+>    1. 单表视图操作: 可以进行增删改, 但是要实现新增: 前提是视图必须包含基表的所有不能为空的字段。
+>    2. 多表视图(基表来源两个以上)不能插入数据, 也不能删除数据，但是可以修改数据。
+>
+>    :::
+>
+> 使用视图还是有很多局限性的，并没有像直接使用表那么方便。如果视图定义中包含了group by、union、聚合函数以及其他一些特殊情况，就不能被更新了；更新视图的查询也可以是一个关联语句，但是被更新的列必须来自同一张表；而且所有使用临时表算法实现的视图都无法被更新。
+
+### 创建视图
+
+可以使用 SQL 语句 CREATE VIEW 创建视图，其语法格式为：
+
+```sql
+CREATE VIEW view_name (column [ ,...n ])
+	[WITH <view_attribute> [ ,...n ]]
+AS select_statement [WITH CHECK OPTION] [;]
+<view_attribute> ::=
+{
+	[ENCRYPTION]
+	[SCHEMABINDING]
+	[VIEW_METADATA]
+}
+```
+
+其中：
+
+1. `view_name`：视图的名称，必须符合 SQL Server 的标识符命名规则。
+2. `column`：视图的列名称。仅在下列情况下需要列名：列是从算术表达式、函数或常量派生的；两个或更多的列可能会具有相同的名称（通常是由于联接的原因）；视图中的某个列的指定名称不同于其派生来源列的名称。
+3. `select_statement`：定义视图的 SELECT 语句。该语句可以使用多个表和其他视图。
+
+4. `CHECK OPTION`：设置针对视图的所有数据修改语句都必须符合 select_statement 中规定的条件。
+5. `ENCRYPTION`：视图是加密的，如果加上这个选项，则无法修改视图。因此，创建视图时需要将脚本保存，否则再也不能修改了。
+6. `SCHEMABINDING`：和底层引用的表进行定义绑定。加上这个选项的话，则视图引用的表不能随便更改构架（例如列的数据类型），如果需要更改底层表构架，则先 DROP 或者 ALTER 在底层表之上绑定的视图。SCHEMABINDIN 常用于定义索引视图。
+7. `VIEW_METADATA`：不设置该选项，返回给客户端的 metadata 是视图所引用表的 metadata。设置了该选项，则返回视图自身的 metadata。通俗点说，VIEW_METADATA 可以让视图看起来貌似表一样，视图的每一列的定义直接告诉客户端，而不是所引用的底层表列的定义。
+
+如：创建一个计算机系教师情况的视图 Sub_T。
+
+```sql
+CREATE VIEW Sub_T AS
+	SELECT TNo, TN, Prof FROM T WHERE Dept = '计算机'
+```
+
+视图名字为 Sub_T，省略了视图字段列表。视图由子查询中的三列 Tno、TN 和 Prof 组成。视图创建后，对视图 Sub_T 的数据的访问只限制在“计算机系”内，且只能访问 TNo、TN 和 Prof 三列的内容，从而达到了数据保密的目的。
+
+又如：创建一学生情况视图 S_SC_C（包括学号、姓名、课程名及成绩）。
+
+```sql
+CREATE VIEW S_SC_C(SNo, SN, CN, Score) AS
+	SELECT S.SNo, SN, CN, Score FROM S, C, SC
+	WHERE S.SNo = SC.SNo AND SC.CNo = C.CNo
+-- 此视图由三个表连接得到，在 S 表和 SC 表中均存在 SNo 列，故需指定视图列名。
+```
+
+### 修改视图
+
+可以使用 SQL 的 ALTER VIEW 语句修改视图，其语法格式为：
+
+```
+ALTER VIEW <视图名>[(<视图列表>)]
+```
 
