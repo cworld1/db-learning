@@ -14,6 +14,7 @@
     "type": "separator",
     "title": "Extend"
   },
+  "experiment": "Experiment",
   "ex01-ds-type": "数据库类型",
 
   "index": {
