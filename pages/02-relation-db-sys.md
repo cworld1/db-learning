@@ -319,17 +319,20 @@ Integrity constraints greatly determine the design of a database schema
    $$
    Π_A(R)= \{ t[A] | t∈R \}
    $$
+
    如：查询讲授 C5 课程的教师号。
+
    $$
    Π_{TNo}(σ_{CNo='C5'}(TC))
    $$
+
    本例中采用选取运算和投影运算相结合的方式，先在授课表 TC 中选取满足条件的元组，然后在 TNo 属性上进行投影。
 
-   | No   |
-   | ---- |
-   | T2   |
-   | T3   |
-   | T5   |
+   | No  |
+   | --- |
+   | T2  |
+   | T3  |
+   | T5  |
 
 3. **θ 连接（θJoin）**（这个好像不要求掌握）
 
@@ -337,24 +340,28 @@ Integrity constraints greatly determine the design of a database schema
 
    设有两个关系 $R(A1, A2, \cdots, An)$ 及 $S(B1, B2, \cdots, Bm)$，连接属性集 $X$ 包含于 ${A1, A2, \cdots, An}$，$Y$ 包含于 ${B1, B2, \cdots, Bm}$，$$X 与 $Y$ 中属性列数目相等，且对应属性有共同的域。
 
-   若 $Z={A1, A2, \cdots, An}/X$（/X 表示去掉 X 之外的属性）及 $W={B1, B2, \cdots, Bm}/Y$，则 R 及 S 可表示为 $R(Z, X)$，$S(W, Y)$；关系 R 和 S 在连接属性 X 和 Y 上的 θ 连接，就是在 R×S 笛卡儿积中，选取 X 属性 列上的分量与 Y 属性列上的分量满足θ比较条件的那些元组，也就是在 R×S 上选取在连接属性 X， Y 上满足θ条件的子集组成新的关系。新关系的列数为 n+m，记作：
+   若 $Z={A1, A2, \cdots, An}/X$（/X 表示去掉 X 之外的属性）及 $W={B1, B2, \cdots, Bm}/Y$，则 R 及 S 可表示为 $R(Z, X)$，$S(W, Y)$；关系 R 和 S 在连接属性 X 和 Y 上的 θ 连接，就是在 R×S 笛卡儿积中，选取 X 属性 列上的分量与 Y 属性列上的分量满足 θ 比较条件的那些元组，也就是在 R×S 上选取在连接属性 X， Y 上满足 θ 条件的子集组成新的关系。新关系的列数为 n+m，记作：
+
    $$
    R \bowtie_{XθY} S = \{ t_r⌒t_s | t_r∈R∧t_s∈S∧t_r [X]θt_s[Y]为真 \}
    $$
-   其中， $\bowtie$ 是连接运算符；θ为算术比较运算符，也称θ连接。
+
+   其中， $\bowtie$ 是连接运算符；θ 为算术比较运算符，也称 θ 连接。
 
    XθY 为连接条件，其中：
 
-   - θ为“=”时，称为等值连接；
-   - θ为“＜”时，称为小于连接；
-   - θ为“＞”时，称为大于连接。
+   - θ 为“=”时，称为等值连接；
+   - θ 为“＜”时，称为小于连接；
+   - θ 为“＞”时，称为大于连接。
 
 4. **自然连接**
 
    在连接运算中，一种最常用的连接是自然连接。所谓自然连接就是在等值连接的情况下，当连接属性 X 与 Y 具有相同属性组时，把在连接结果中重复的属性列去掉。即如果 R 与 S 具有相同的属性组 Y，则自然连接可记作：
+
    $$
    R \bowtie S = \{ t_r⌒t_s | t_r∈R∧t_s∈S∧t_r[Y] = t_s[Y]\}
    $$
+
    自然连接是在广义笛卡儿积 R×S 中选出同名属性上符合相等条件的元组，再进行投影，去掉重复的同名属性，组成新的关系。
 
    等值连接与自然连接的区别：
@@ -365,9 +372,11 @@ Integrity constraints greatly determine the design of a database schema
 5. **除法（Division）**
 
    除法运算是二目运算，设有关系 R（X，Y）与关系 S（Y，Z），其中 X，Y，Z 为属性集合，R 中的 Y 与 S 中的 Y 可以有不同的属性名，但对应属性必须出自相同的域。关系 R 除 以关系 S 所得的商是一个新关系 P（X），P 是 R 中满足下列条件的元组在 X 上的投影：元组在 X 上 分量值 x 的像集 $Y_x$ 包含 S 在 Y 上投影的集合。记作：
+
    $$
    R÷S = \{ t_r[X]\ |\ t_r∈R∧Π_y(S)⊆Y_x \}
    $$
+
    其中，$Y_x$ 为 x 在 R 中的像集，$x=t_r[X]$。
 
    如：已知关系 R 和 S，如图 2-11（a）和图 2-11（b）所示，则 R÷S 如图 2-11（c）所示。
@@ -387,13 +396,119 @@ Integrity constraints greatly determine the design of a database schema
    除法运算同时从行和列的角度进行运算，适合于包含“全部”之类的短语的查询。
 
    又如：查询选修了全部课程的学生学号和姓名。
+
    $$
    Π_{SNo,CNo}(SC) ÷ Π_{CNo}(C) \bowtie Π_{SNo,SN}(S)
    $$
 
 ## 关系演算
 
-老师不讲，暂时跳了
+关系演算是一种非过程查询语言，它告诉系统要检索哪些数据但不告诉如何检索它。关系演算是以数理逻辑中的谓词演算为基础，通过谓词形式来表示查询表达式。根据谓词变元的不同，可将关系演算分为元组关系演算和域关系演算。
+
+> [数据库学习摘记 —— 关系代数和关系演算 - 咕~咕咕 - 博客园 (cnblogs.com)](https://www.cnblogs.com/ruaa/p/12540253.html)
+>
+> 关系运算的安全限制：
+>
+> **无限关系：**当元组变元 t 中某一属性的定义域是无限时，如表示所有不在关系 R 中的元组的集合 $\{t | ┐R(t)\}$。
+>
+> **无穷验证过程：**t 的取值范围为无限，如验证 $(∀t)(ω(t))$ 为真的过程。
+>
+> **安全表达式：**不产生无限关系和无穷验证过程的表达式。
+>
+> **安全限制：**为保证所有表达式都是安全表达式所采取的限制措施。
+>
+> **关系代数运算是安全的：**当给定的所有关系是有限时，其运算的有限次复合不会出现无限关系和无穷验证。
+>
+> **等价：**关系代数、安全的元组关系演算和安全的域关系演算的表达能力是等价的，可以相互转换。
+
+### 元组关系演算（TRC）
+
+参考自 [Tuple Relational Calculus (TRC) in DBMS - GeeksforGeeks](https://www.geeksforgeeks.org/tuple-relational-calculus-trc-in-dbms/)，有删改。
+
+Tuple Relational Calculus (元组关系演算，也可以简称 TRC) is a non-procedural query language(非过程查询语言) used in relational database management systems (关系数据库管理系统 RDBMS) to retrieve data(检索数据) from tables. TRC is based on the concept of tuples(基于元组的概念), which are ordered sets of attribute values(是一组有序的属性值) that represent a single row or record in a database table.
+
+TRC is a declarative language, meaning that it specifies what data is required from the database, rather than how to retrieve it. TRC queries are expressed as logical formulas that describe the desired tuples. TRC 是一种声明性语言，这意味着它指定需要从数据库中获取哪些数据，而不是如何检索这些数据。TRC 查询表示为描述所需元组的逻辑公式。
+
+The basic syntax(基本语法) of TRC is as follows:
+
+$$
+\{ t | P(t) \}
+$$
+
+where t is a tuple variable and P(t) is a logical formula that describes the conditions that the tuples in the result must satisfy(描述结果中的元组必须满足的条件的逻辑公式). The curly braces {} are used to indicate(指示) that the expression is a set of tuples. 其中 t 是元组变量，P(t) 是描述结果中的元组必须满足的条件的逻辑公式。花括号 {} 用于指示表达式是一组元组。
+
+It also uses quantifiers(量词):
+
+$$
+∃ t ∈ r (Q(t))
+$$
+
+It means ”there exists” a tuple in t in relation r such that predicate Q(t) is true. And $∀ t ∈ r (Q(t)) = Q(t)$ is true “for all” tuples in relation r.
+
+For example, let’s say we have a table called “Employees” with the following attributes:
+
+- EmployeeID
+- Name
+- Salary
+- DepartmentID
+
+To retrieve(检索) the names of all employees who earn more than $50,000 per year, we can use the following TRC query:
+
+$$
+\{ t | Employees(t) ∧ t.Salary > 50000 \}
+$$
+
+In this query, the “Employees(t)” expression specifies(指定) that the tuple variable t represents a row in the “Employees” table. The “∧” symbol is the logical AND operator, which is used to combine the condition “t.Salary > 50000” with the table selection. 在此查询中，“Employees(t)”表达式指定元组变量 t 表示“Employees”表中的一行。 “∧”符号是逻辑与运算符，用于将条件“t.Salary > 50000”与表选择结合起来。
+
+The result of this query will be a set of tuples, where each tuple contains the Name attribute of an employee who earns more than $50,000 per year. 此查询的结果将是一组元组，其中每个元组包含年收入超过 50,000 美元的员工的 Name 属性。
+
+TRC can also be used to perform more complex queries, such as joins and nested queries, by using additional logical operators and expressions. 通过使用额外的逻辑运算符和表达式，TRC 还可用于执行更复杂的查询，例如连接和嵌套查询。
+
+While TRC is a powerful query language, it can be more difficult to write and understand than other SQL-based query languages, such as Structured Query Language (SQL). However, it is useful in certain applications, such as in the formal verification of database schemas and in academic research. 虽然 TRC 是一种功能强大的查询语言，但它比其他基于 SQL 的查询语言（例如结构化查询语言 (SQL)）更难编写和理解。但是，它在某些应用程序中很有用，例如数据库模式的形式验证和学术研究。
+
+Tuple Relational Calculus is a **non-procedural query language** unlike relational algebra. Tuple Calculus provides only the description of the query but it does not provide the methods to solve it. Thus, it explains what to do but not how to do. 与关系代数不同，元组关系演算是一种非过程查询语言。元组微积分仅提供查询的描述，但不提供解决问题的方法。因此，它解释了做什么而不是如何做。
+
+> 如：
+>
+> | First_Name | Last_Name | Age |
+> | ---------- | --------- | --- |
+> | Ajeet      | Singh     | 30  |
+> | Chaitanya  | Singh     | 31  |
+> | Rajeev     | Bhatia    | 27  |
+> | Carl       | Pratap    | 28  |
+>
+> 1. 查询来显示年龄大于 30 岁的学生的姓氏。
+>
+>    $$
+>    \{ \text{t.Last\_Name}\ |\ \text{Student(t)}\ \ AND\ \ \text{t.age} > 30 \}
+>    $$
+>
+>    | Last_Name |
+>    | --------- |
+>    | Singh     |
+>
+> 2. 查询来显示姓氏为`"Singh"`的学生的所有详细信息。
+>
+>    $$
+>     \{ \text{t}\ |\ \text{Student(t)}\ \ AND\ \ \text{t.Last\_Name} > 30 \}
+>    $$
+>
+>    | First_Name | Last_Name | Age |
+>    | ---------- | --------- | --- |
+>    | Ajeet      | Singh     | 30  |
+>    | Chaitanya  | Singh     | 31  |
+
+### 域关系演算（DRC）
+
+在域关系演算中，记录基于域进行过滤。
+
+**Domain Relational Calculus** is a non-procedural query language equivalent in power to Tuple Relational Calculus. Domain Relational Calculus provides only the description of the query but it does not provide the methods to solve it. In Domain Relational Calculus, a query is expressed as, 域关系演算是一种非过程查询语言，其功能等同于元组关系演算。域关系演算仅提供查询的描述，但不提供解决问题的方法。在域关系演算中，查询表示为，
+$$
+\{ < x1, x2, x3, ..., xn > | P (x1, x2, x3, ..., xn ) \}
+$$
+where, < x1, x2, x3, …, xn > represents resulting domains variables(结果域变量) and P (x1, x2, x3, …, xn ) represents the condition or formula equivalent to the Predicate calculus(Predicate 演算的条件或公式).
+
+
 
 ## Summary
 
