@@ -1,4 +1,6 @@
-# At the Beginning
+---
+title: At the Beginning
+---
 
 ## 数据库原理与应用是一门新兴学科
 
