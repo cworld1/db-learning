@@ -213,9 +213,9 @@ Integrity constraints greatly determine the design of a database schema
 
 关系代数的运算对象是关系，运算结果也是关系。关系代数用到的运算符主要包括以下四类：
 
-1. 集合运算符：$∪$（并）、$–$（差）、$∩$（交）、$×$（广义笛卡儿积）。
+1. 集合运算符：$∪$（并）、$-$（差）、$∩$（交）、$×$（广义笛卡儿积）。
 2. 专门的关系运算符：$σ$（选取）、$∏$（投影）、 $\bowtie_{XθY}$（θ 连接）、$\bowtie$（自然连接）、$÷$（除）。
-3. 算术比较运算符：$＞$（大于）、$≥$（大于等于）、$＜$（小于）、$≤$（小于等于）、$=$（等于）、 $≠$（不等于）。
+3. 算术比较运算符：$>$（大于）、$≥$（大于等于）、$<$（小于）、$≤$（小于等于）、$=$（等于）、 $≠$（不等于）。
 4. 逻辑运算符有：$∧$（与）、$∨$（或）、$┐$（非）。
 
 关系代数的运算按运算符的不同主要分为以下两类：
@@ -267,7 +267,7 @@ Integrity constraints greatly determine the design of a database schema
    个分别为 n 元和 m 元的关系 R 和 S 的广义笛卡儿积是一个（n+m）列的元组的集合，元组的前 n 列是关系 R 的一个元组，后 m 列是关系 S 的一个元组。若 R 有 k1 个元组，S 有 k2 个元组，则关 系 R 和关系 S 的广义笛卡儿积有 k1×k2 个元组，记作：
 
    $$
-   R×S = \{ tr⌒ts| tr∈R∧ts∈S \}
+   R×S = \{ tr \frown ts| tr∈R∧ts∈S \}
    $$
 
    关系的广义笛卡儿积可用于两关系的连接操作（连接操作将在下一节中介绍）。
@@ -283,7 +283,7 @@ Integrity constraints greatly determine the design of a database schema
    选取运算是单目运算，它根据一定的条件从关系 R 中选择若干个元组，组成一个新关系，记作：
 
    $$
-   σ_F(R) = \{ t | t∈R∧F(t) = '真' \}
+   σ_F(R) = \{ t | t∈R∧F(t) = \text{'真'} \}
    $$
 
    其中，σ 为选取运算符；F 为选取的条件，它是由运算对象（属性名、常数、简单函数）、算术比较运算符（＞、≥、＜、≤、=、≠）和逻辑运算符（∨、∧、┐）连接起来的逻辑表达式，结果为逻辑值“真”或“假”。
@@ -293,8 +293,8 @@ Integrity constraints greatly determine the design of a database schema
    如：查询计算机系的全体学生（其中 5 为属性 Dept 的序号）。
 
    $$
-   σ_{Dept='计算机'}(S) \\
-   或：σ_{5='计算机'}(S)
+   σ_{Dept=\text{'计算机'}}(S) \\
+   \text{或：} σ_{5=\text{'计算机'}}(S)
    $$
 
    | SNo | SN   | Sex | Age | Dept   |
@@ -305,7 +305,7 @@ Integrity constraints greatly determine the design of a database schema
    又如：查询工资高于 1000 元（不包括 1000 元）的男教师。
 
    $$
-   σ_{(Sal＞1000)∧ (Sex= '男')}(T)
+   σ_{(Sal>1000)∧ (Sex= \text{'男'})}(T)
    $$
 
    | TNo | TN   | Sex | Age | Prof | Sal  | Comm | Dept   |
@@ -343,7 +343,7 @@ Integrity constraints greatly determine the design of a database schema
    若 $Z={A1, A2, \cdots, An}/X$（/X 表示去掉 X 之外的属性）及 $W={B1, B2, \cdots, Bm}/Y$，则 R 及 S 可表示为 $R(Z, X)$，$S(W, Y)$；关系 R 和 S 在连接属性 X 和 Y 上的 θ 连接，就是在 R×S 笛卡儿积中，选取 X 属性 列上的分量与 Y 属性列上的分量满足 θ 比较条件的那些元组，也就是在 R×S 上选取在连接属性 X， Y 上满足 θ 条件的子集组成新的关系。新关系的列数为 n+m，记作：
 
    $$
-   R \bowtie_{XθY} S = \{ t_r⌒t_s | t_r∈R∧t_s∈S∧t_r [X]θt_s[Y]为真 \}
+   R \bowtie_{XθY} S = \{ t_r\frown t_s | t_r∈R∧t_s∈S∧t_r [X]θt_s[Y] \text{为真} \}
    $$
 
    其中， $\bowtie$ 是连接运算符；θ 为算术比较运算符，也称 θ 连接。
@@ -359,7 +359,7 @@ Integrity constraints greatly determine the design of a database schema
    在连接运算中，一种最常用的连接是自然连接。所谓自然连接就是在等值连接的情况下，当连接属性 X 与 Y 具有相同属性组时，把在连接结果中重复的属性列去掉。即如果 R 与 S 具有相同的属性组 Y，则自然连接可记作：
 
    $$
-   R \bowtie S = \{ t_r⌒t_s | t_r∈R∧t_s∈S∧t_r[Y] = t_s[Y]\}
+   R \bowtie S = \{ t_r\frown t_s | t_r∈R∧t_s∈S∧t_r[Y] = t_s[Y]\}
    $$
 
    自然连接是在广义笛卡儿积 R×S 中选出同名属性上符合相等条件的元组，再进行投影，去掉重复的同名属性，组成新的关系。
@@ -409,17 +409,17 @@ Integrity constraints greatly determine the design of a database schema
 >
 > 关系运算的安全限制：
 >
-> **无限关系：**当元组变元 t 中某一属性的定义域是无限时，如表示所有不在关系 R 中的元组的集合 $\{t | ┐R(t)\}$。
+> **无限关系**：当元组变元 t 中某一属性的定义域是无限时，如表示所有不在关系 R 中的元组的集合 $\{t | ┐R(t)\}$。
 >
-> **无穷验证过程：**t 的取值范围为无限，如验证 $(∀t)(ω(t))$ 为真的过程。
+> **无穷验证过程**：t 的取值范围为无限，如验证 $(∀t)(ω(t))$ 为真的过程。
 >
-> **安全表达式：**不产生无限关系和无穷验证过程的表达式。
+> **安全表达式**：不产生无限关系和无穷验证过程的表达式。
 >
-> **安全限制：**为保证所有表达式都是安全表达式所采取的限制措施。
+> **安全限制**：为保证所有表达式都是安全表达式所采取的限制措施。
 >
-> **关系代数运算是安全的：**当给定的所有关系是有限时，其运算的有限次复合不会出现无限关系和无穷验证。
+> **关系代数运算是安全的**：当给定的所有关系是有限时，其运算的有限次复合不会出现无限关系和无穷验证。
 >
-> **等价：**关系代数、安全的元组关系演算和安全的域关系演算的表达能力是等价的，可以相互转换。
+> **等价**：关系代数、安全的元组关系演算和安全的域关系演算的表达能力是等价的，可以相互转换。
 
 ### 元组关系演算（TRC）
 
@@ -503,12 +503,108 @@ Tuple Relational Calculus is a **non-procedural query language** unlike relation
 在域关系演算中，记录基于域进行过滤。
 
 **Domain Relational Calculus** is a non-procedural query language equivalent in power to Tuple Relational Calculus. Domain Relational Calculus provides only the description of the query but it does not provide the methods to solve it. In Domain Relational Calculus, a query is expressed as, 域关系演算是一种非过程查询语言，其功能等同于元组关系演算。域关系演算仅提供查询的描述，但不提供解决问题的方法。在域关系演算中，查询表示为，
+
 $$
 \{ < x1, x2, x3, ..., xn > | P (x1, x2, x3, ..., xn ) \}
 $$
-where, < x1, x2, x3, …, xn > represents resulting domains variables(结果域变量) and P (x1, x2, x3, …, xn ) represents the condition or formula equivalent to the Predicate calculus(Predicate 演算的条件或公式).
 
+where, $< x1, x2, x3, …, xn >$ represents resulting domains variables(结果域变量) and $P (x1, x2, x3, …, xn )$ represents the condition or formula equivalent to the Predicate calculus(Predicate 演算的条件或公式).
 
+**Predicate Calculus Formula 谓词演算公式：**
+
+1. Set of all comparison operators 所有比较运算符的集合
+2. Set of connectives(连接词) like and, or, not
+3. Set of quantifiers 量词集
+
+如：
+
+Loan 表：
+
+| Loan number | Branch name | Amount |
+| :---------: | :---------: | :----: |
+|     L01     |    Main     |  200   |
+|     L03     |    Main     |  150   |
+|     L10     |     Sub     |   90   |
+|     L08     |    Main     |   60   |
+
+Borrower 表：
+
+| Customer name | Loan number |
+| :-----------: | :---------: |
+|     Ritu      |     L01     |
+|    Debomit    |     L08     |
+|    Soumya     |     L03     |
+
+1. Find the loan number, branch, amount of loans of greater than or equal to 100 amount.
+
+   $$
+   \{<l> |\ ∃ b, a (<l, b, a> ∈ loan ∧ (a ≥ 150)\}
+   $$
+
+   | Loan number | Branch name | Amount |
+   | :---------: | :---------: | :----: |
+   |     L01     |    Main     |  200   |
+   |     L03     |    Main     |  150   |
+
+2. Find the names of all customers having a loan at the “Main” branch and find the loan amount.
+
+   $$
+   \{≺c, a≻ |\ ∃ l (≺c, l≻ ∈ borrower ∧ ∃ b (≺l, b, a≻ ∈ loan ∧ (b = \text{“Main”})))\}
+   $$
+
+   | Customer Name | Amount |
+   | :-----------: | :----: |
+   |     Ritu      |  200   |
+   |    Debomit    |   60   |
+   |    Soumya     |  150   |
+
+The domain variables(域变量) those will be in resulting relation(结果关系) must appear before | within < and > and all the domain variables must appear in which order they are in original relation or table 所有域变量必须按照它们在原始关系或表中的顺序出现.
+
+### Difference between TRC and DRC
+
+参考自 [Difference between Tuple Relational Calculus (TRC) and Domain Relational Calculus (DRC) - GeeksforGeeks](https://www.geeksforgeeks.org/difference-between-tuple-relational-calculus-trc-and-domain-relational-calculus-drc/)，有删改。
+
+1. **[Tuple Relational Calculus (TRC)](https://www.geeksforgeeks.org/tuple-relational-calculus-trc-in-dbms/)**:
+
+   A tuple relational calculus is a non-procedural query language(非过程查询语言) that specifies to select of the tuples in a relation. It can select the tuples with a range of values or tuples for certain attribute values(某些属性值) etc. The resulting relation can have one or more tuples.
+
+   公式：
+
+   $$
+   \{T | P (T)\}\ \ \text{or}\ \  \{T | Condition (T)\}
+   $$
+
+   where T is the resulting tuples and P(T) is a condition used to fetch T.
+
+2. **[Domain Relational Calculus (DRC)](https://www.geeksforgeeks.org/domain-relational-calculus-in-dbms/)**:
+
+   A domain relational calculus uses the list of attributes(属性列表) to be selected from the relation based on the condition. It is the same as TRC but differs by selecting the attributes rather than selecting whole tuples.
+
+   公式：
+
+   $$
+   \{ <a1, a2, a3, ..., an> | P (a1, a2, a3, ..., an) \}
+   $$
+
+一图流表格：
+
+|          Basis of Comparison          |                                                                                                       Tuple Relational Calculus (TRC)                                                                                                        |                                                                                                           Domain Relational Calculus (DRC)                                                                                                            |
+| :-----------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|            **Definition**             | The Tuple Relational Calculus (TRC) is used to select tuples from a relation. The tuples with specific range values, tuples with certain attribute values, and so on can be selected. 可以选择具有特定范围值的元组、具有特定属性值的元组等。 | The Domain Relational Calculus (DRC) employs a list of attributes from which to choose based on the condition. It’s similar to TRC, but instead of selecting entire tuples, it selects attributes. 它类似于 TRC，但它不是选择整个元组，而是选择属性。 |
+| **Representation(表示) of variables** |                                                                            In TRC, the variables represent the tuples from specified relations(指定关系中的元组).                                                                            |                                                                             In DRC, the variables represent the value drawn from a specified domain(从指定域中提取的值).                                                                              |
+|           **Tuple/ Domain**           |                                                                                   A tuple is a single element of relation. In database terms, it is a row.                                                                                   |                                                             A domain is equivalent to column data type and any constraints on the value of data. 域等同于列数据类型和对数据值的任何约束。                                                             |
+|             **Filtering**             |                                                                                 This filtering variable uses a tuple of relations. 此过滤变量使用关系元组。                                                                                  |                                                                                This filtering is done based on the domain of attributes. 这种过滤是基于属性域完成的。                                                                                 |
+|           **Return Value**            | The predicate expression condition associated with the TRC is used to test every row using a tuple variable and return those tuples that met the condition. 与 TRC 关联的谓词表达式条件用于使用元组变量测试每一行并返回满足条件的那些元组。  |             DRC takes advantage of domain variables and, based on the condition set, returns the required attribute or column that satisfies the criteria of the condition. DRC 利用域变量，并根据条件集返回满足条件条件的所需属性或列。              |
+|       **Membership condition**        |                                                                         The query cannot be expressed using a membership condition. 不能使用成员资格条件来表达查询。                                                                         |                                                                               The query can be expressed using a membership condition. 可以使用成员资格条件来表达查询。                                                                               |
+|          **Query Language**           |                                                                                        The QUEL or Query Language is a query language related to it.                                                                                         |                                                                                             The QBE or Query-By-Example is query language related to it.                                                                                              |
+|            **Similarity**             |                                                                            It reflects traditional pre-relational file structures. 它反映了传统的前关系文件结构。                                                                            |                                                                                It is more similar to logic as a modeling language. 作为一种建模语言，它更类似于逻辑。                                                                                 |
+|              **Syntax**               |                                                                                                     {T \| P (T)} or {T \| Condition (T)}                                                                                                     |                                                                                                     { a1, a2, a3, …, an \| P (a1, a2, a3, …, an)}                                                                                                     |
+|              **Example**              |                                                                                                    {T \| EMPLOYEE (T) AND T.DEPT_ID = 10}                                                                                                    |                                                                                                           { \| < EMPLOYEE > DEPT_ID = 10 }                                                                                                            |
+|               **Focus**               |                                                                                                 Focuses on selecting tuples from a relation                                                                                                  |                                                                                                      Focuses on selecting values from a relation                                                                                                      |
+|             **Variables**             |                                                                                                        Uses tuple variables (e.g., t)                                                                                                        |                                                                                                 Uses scalar variables(标量变量) (e.g., a1, a2, …, an)                                                                                                 |
+|          **Expressiveness**           |                                                                                                               Less expressive                                                                                                                |                                                                                                                    More expressive                                                                                                                    |
+|            **Ease of use**            |                                                                                                      Easier to use for simple queries.                                                                                                       |                                                                                                       More difficult to use for simple queries.                                                                                                       |
+|             **Use case**              |                                          Useful for selecting tuples that satisfy a certain condition or for retrieving a subset of a relation. 对于选择满足特定条件的元组或检索关系的子集很有用。                                           |                                         Useful for selecting specific values or for constructing more complex queries that involve multiple relations. 对于选择特定值或构建涉及多个关系的更复杂的查询很有用。                                         |
 
 ## Summary
 

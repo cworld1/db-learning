@@ -1,6 +1,8 @@
 ---
-title: Procedure, Function and Cursor
+title: 04 Procedure, Function and Cursor
 ---
+
+import { Callout } from "nextra-theme-docs";
 
 ## Stored program
 
@@ -15,13 +17,15 @@ Four types stored programs
 
 一个存储过程可以从应用程序调用，访问数据库存储函数可以调用从一个 SQL 语句，就像 MySQL 所提供的功能，不需要被称为触发器和事件。相反，他们发生时自动执行。
 
-::: tip Why Use Stored Programs?
+<Callout type="info" emoji="ℹ️">
+
+**Why Use Stored Programs?**
 
 - The use of stored programs can lead to a more secure database 使用存储程序可以获得更安全的数据库
 - Stored programs can reduce network traffic
 - Stored programs offer a mechanism to abstract data access routines, which can improve the maintainability of your code as underlying data structures evolve 存储程序提供了一种抽象数据访问例程的机制，可以随着底层数据结构的发展提高代码的可维护性
 
-:::
+</Callout>
 
 ### 存储过程
 
@@ -29,9 +33,9 @@ Four types stored programs
 
 MySQL 5.0 开始支持存储过程，这样即可以大大提高数据库的处理速度，同时也可以提高数据库编程的灵活性。
 
-::: tip
-SQL 语句需要先编译然后执行。
-:::
+<Callout type="warning" emoji="⚠️">
+  SQL 语句需要先编译然后执行。
+</Callout>
 
 存储过程（Stored Procedure）是一组为了完成特定功能的 SQL 语句集，经编译后存储在数据库中，用户通过指定存储过程的名字并给定参数（如果该存储过程带有参数）来调用执行它。
 
@@ -92,7 +96,9 @@ DELIMITER;
 CALL test();
 ```
 
-::: tip 分隔符
+<Callout type="info" emoji="ℹ️">
+
+**分隔符**
 
 MySQL 默认以“;”为分隔符，如果没有声明分隔符，则编译器会把存储过程当成 SQL 语句进行处理，因此编译过程会报错，所以要事先用“DELIMITER //”声明当前段分隔符，//替代分号成为新的分隔符；
 
@@ -102,7 +108,7 @@ MySQL 默认以“;”为分隔符，如果没有声明分隔符，则编译器�
 
 “DELIMITER;”的意为把分隔符还原为分号。
 
-:::
+</Callout>
 
 A SQL statement used within stored programs:
 
@@ -370,7 +376,9 @@ DECLARE variable_name data_type [DEFAULT literal_value];
   INTO variable_name_1[,variable_name_2]...
   ```
 
-:::tip mysql 存储过程中 declare 和 set 定义变量的区别
+<Callout type="info" emoji="ℹ️">
+
+**mysql 存储过程中 declare 和 set 定义变量的区别**
 
 mysql 存储过程中，定义变量有两种方式：
 
@@ -390,7 +398,7 @@ mysql 存储过程中，定义变量有两种方式：
 
    主要用在存储过程中，或者是给存储传参数中。在调用存储过程时，这些变量都会被初始化为 NULL。
 
-:::
+</Callout>
 
 ## Cursor
 
@@ -455,12 +463,12 @@ OPEN cursor_name;
 
 在游标被成功打开后，全局变量 `@@CORSOR_ROWS` 用来记录游标内的数据行数。返回值有四种：
 
-| 返回值 | 描述                                                        |
-| ------ | ----------------------------------------------------------- |
-| -m     | 表示仍在从基础表向游标读入数据，m表示当前在游标中的数据行数 |
-| -1     | 该游标是一个动态游标，其返回值无法确定                      |
-| 0      | 无符合调剂的记录或游标已经关闭                              |
-| n      | 从基础表向游标读入数据已结束，n 为游标中已有的数据记录行数  |
+| 返回值 | 描述                                                         |
+| ------ | ------------------------------------------------------------ |
+| -m     | 表示仍在从基础表向游标读入数据，m 表示当前在游标中的数据行数 |
+| -1     | 该游标是一个动态游标，其返回值无法确定                       |
+| 0      | 无符合调剂的记录或游标已经关闭                               |
+| n      | 从基础表向游标读入数据已结束，n 为游标中已有的数据记录行数   |
 
 如：创建游标 curl，使 curl 可以对 student 表所有的数据进行操作，然后打开该游标，输出游标中的行数。
 
@@ -480,16 +488,16 @@ SELECT '游标curl数据行数' = @@CURSOR_ROWS
 FETCH [[ NEXT | PRIOR | FIRST | LAST | ABSOLUTE{n|@nvar }| RELATIVE { n|@nvar }] FROM ]
 {{[ GLOBAL] 游标名称} | @游标变量名称 }
 -- 将读取的游标数据存放到指定变量中
-[ INTO @游标变量名称 ][,...n]                                                       
+[ INTO @游标变量名称 ][,...n]
 ```
 
-FETCH语句执行时，可以使用全局变量 `@@FETCH_STATUS` 返回上次执行 FETCH 命令的状态。在每次用 fetch 从游标中读取数据时，都应检查该变量，以确定上次 FETCH操作是否成功，来决定如何进行下一步处理。返回值有三种：
+FETCH 语句执行时，可以使用全局变量 `@@FETCH_STATUS` 返回上次执行 FETCH 命令的状态。在每次用 fetch 从游标中读取数据时，都应检查该变量，以确定上次 FETCH 操作是否成功，来决定如何进行下一步处理。返回值有三种：
 
-| 返回值 | 描述                                            |
-| ------ | ----------------------------------------------- |
-| 0      | FETCH命令被成功执行                             |
-| 1      | FETCH命令失败或者行数据超过游标数据结果集的范围 |
-| 2      | 所读取的数据已经不存在                          |
+| 返回值 | 描述                                             |
+| ------ | ------------------------------------------------ |
+| 0      | FETCH 命令被成功执行                             |
+| 1      | FETCH 命令失败或者行数据超过游标数据结果集的范围 |
+| 2      | 所读取的数据已经不存在                           |
 
 如：从游标中提取数据，并查看 FETCH 命令的执行状态。
 

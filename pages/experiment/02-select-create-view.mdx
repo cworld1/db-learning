@@ -1,6 +1,8 @@
 ---
-title: Practicing Select and Creating view
+title: 02 Practicing Select and Creating view
 ---
+
+import { Callout } from "nextra-theme-docs";
 
 ## Select 语句
 
@@ -43,19 +45,19 @@ using(id);
 - RIGHT JOIN（右连接）：与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。
 - 全连接：MySQL 没有全外连接，用 `union` 将左右外连接合并。
 
-::: tip
+<Callout type="info" emoji="ℹ️">
 
 如果我们有一个包含名字和姓氏的表格，可以使用 CONCAT 函数将这两个字段连接起来形成一个完整的姓名字段。在 MySQL 中，使用 CONCAT 函数的语法如下：
 
-```sql
-SELECT CONCAT(first_name, ' ', last_name) AS full_name
-# 有时也写成 SELECT CONCAT(last_name,', ',first_name) AS full_name
-FROM table_name;
-```
+    ```sql
+    SELECT CONCAT(first_name, ' ', last_name) AS full_name
+    # 有时也写成 SELECT CONCAT(last_name,', ',first_name) AS full_name
+    FROM table_name;
+    ```
 
 这条语句将会返回一个名为 `full_name` 的新字段，其中包含了名字和姓氏的组合。
 
-:::
+</Callout>
 
 ### 分组 GROUP BY
 
@@ -308,9 +310,6 @@ WHERE age > 20;
 
 额外实验内容：
 
-- 用SQL语句完成图书管理系统book 数据库相关数据录入，同时使用insert，update, delete语句对book数据库进行操作。
-- 每个语句至少练习5个以上的示例，请写出对应SQL语句所表达的意思。
-- 实验报告中除文字描述外，必须提供每一操作对应的SQL语句文本文档，并附上执行结果截图。列出实验中所遇到的问题，及如何解决问题的。
-
-
-
+- 用 SQL 语句完成图书管理系统 book 数据库相关数据录入，同时使用 insert，update, delete 语句对 book 数据库进行操作。
+- 每个语句至少练习 5 个以上的示例，请写出对应 SQL 语句所表达的意思。
+- 实验报告中除文字描述外，必须提供每一操作对应的 SQL 语句文本文档，并附上执行结果截图。列出实验中所遇到的问题，及如何解决问题的。

@@ -1,5 +1,5 @@
 ---
-title: 数据完整性约束、函数的使用，索引的创建
+title: 03 Data integrity constraints, the function of use, index creation
 ---
 
 ## Constraints 数据完整性约束
@@ -94,9 +94,6 @@ select * from student;
 # |  1 | egon | male |
 # |  2 | alex | male |
 # +----+------+------+
-
--- 也可以指定id：
- 
 ```
 
 ## Function 函数

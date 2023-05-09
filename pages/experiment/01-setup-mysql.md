@@ -1,4 +1,6 @@
-# Basic Mysql, Create table, alter table
+---
+title: 01 Basic Mysql, Create table, alter table
+---
 
 ## MySQL 安装
 
