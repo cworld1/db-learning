@@ -338,7 +338,7 @@ Integrity constraints greatly determine the design of a database schema
 
    θ 连接运算是二目运算，是从两个关系的笛卡儿积中选取满足连接条件的元组，组成新的关系。
 
-   设有两个关系 $R(A1, A2, \cdots, An)$ 及 $S(B1, B2, \cdots, Bm)$，连接属性集 $X$ 包含于 ${A1, A2, \cdots, An}$，$Y$ 包含于 ${B1, B2, \cdots, Bm}$，$$X 与 $Y$ 中属性列数目相等，且对应属性有共同的域。
+   设有两个关系 $R(A1, A2, \cdots, An)$ 及 $S(B1, B2, \cdots, Bm)$，连接属性集 $X$ 包含于 ${A1, A2, \cdots, An}$，$Y$ 包含于 ${B1, B2, \cdots, Bm}$，$X$ 与 $Y$ 中属性列数目相等，且对应属性有共同的域。
 
    若 $Z={A1, A2, \cdots, An}/X$（/X 表示去掉 X 之外的属性）及 $W={B1, B2, \cdots, Bm}/Y$，则 R 及 S 可表示为 $R(Z, X)$，$S(W, Y)$；关系 R 和 S 在连接属性 X 和 Y 上的 θ 连接，就是在 R×S 笛卡儿积中，选取 X 属性 列上的分量与 Y 属性列上的分量满足 θ 比较条件的那些元组，也就是在 R×S 上选取在连接属性 X， Y 上满足 θ 条件的子集组成新的关系。新关系的列数为 n+m，记作：
 

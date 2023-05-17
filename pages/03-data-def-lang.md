@@ -271,7 +271,7 @@ COMMIT;
        SNo VARCHAR(6),
        CNo VARCHAR(6),
        Score NUMERIC(4,1) CONSTRAINT Score_Chk CHECK(Score>=0 AND Score <=100))
-
+   
    -- 建立包含完整性定义的学生表 S。
    CREATE TABLE S(
        SNo VARCHAR(6) CONSTRAINT S_Prim PRIMARY KEY,
