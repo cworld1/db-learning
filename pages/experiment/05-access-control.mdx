@@ -1,0 +1,161 @@
+---
+title: 05 Mysql access control
+---
+
+import { Callout } from "nextra-theme-docs";
+
+## 用户管理
+
+### 创建用户
+
+格式：
+
+```sql
+CREATE USER [IF NOT EXISTS]
+    user [auth_option] [, user [auth_option]] ...
+    DEFAULT ROLE role [, role ] ...
+    [REQUIRE {NONE | tls_option [[AND] tls_option] ...}]
+    [WITH resource_option [resource_option] ...]
+    [password_option | lock_option] ...
+    [COMMENT 'comment_string' | ATTRIBUTE 'json_object']
+
+user:
+    (see Section 6.2.4, “Specifying Account Names”)
+
+auth_option: {
+    IDENTIFIED BY 'auth_string' [AND 2fa_auth_option]
+  | IDENTIFIED BY RANDOM PASSWORD [AND 2fa_auth_option]
+  | IDENTIFIED WITH auth_plugin [AND 2fa_auth_option]
+  | IDENTIFIED WITH auth_plugin BY 'auth_string' [AND 2fa_auth_option]
+  | IDENTIFIED WITH auth_plugin BY RANDOM PASSWORD [AND 2fa_auth_option]
+  | IDENTIFIED WITH auth_plugin AS 'auth_string' [AND 2fa_auth_option]
+  | IDENTIFIED WITH auth_plugin [initial_auth_option]
+}
+
+tls_option: {
+   SSL
+ | X509
+ | CIPHER 'cipher'
+ | ISSUER 'issuer'
+ | SUBJECT 'subject'
+}
+
+resource_option: {
+    MAX_QUERIES_PER_HOUR count
+  | MAX_UPDATES_PER_HOUR count
+  | MAX_CONNECTIONS_PER_HOUR count
+  | MAX_USER_CONNECTIONS count
+}
+
+password_option: {
+    PASSWORD EXPIRE [DEFAULT | NEVER | INTERVAL N DAY]
+  | PASSWORD HISTORY {DEFAULT | N}
+  | PASSWORD REUSE INTERVAL {DEFAULT | N DAY}
+  | PASSWORD REQUIRE CURRENT [DEFAULT | OPTIONAL]
+  | FAILED_LOGIN_ATTEMPTS N
+  | PASSWORD_LOCK_TIME {N | UNBOUNDED}
+}
+```
+
+如：：
+
+```sql
+create user 'user01' @'localhost' identified by 'user01';
+```
+
+<Callout type="warn" emoji="🛡️">
+  注：用户的添加修改删除等操作都是在 root 权限下操作的！
+</Callout>
+
+其中：
+
+- PASSWORD：用于指定散列口令，即若使用明文设置口令，则需忽略 PASSWORD 关键字；
+
+  若不想以明文设置口令，且知道 PASSWORD() 函数返回给密码的散列值，则可以在口令设置语句中指定此散列值，但需要加上关键字 PASSWORD。
+
+- 创建用户账号，格式为 'user_name'@'host_name’。
+
+  user_name 是用户名，host_name 为主机名，即用户连接 MySQL 时所在主机的名字。
+  若在创建的过程中，只给出了账户的用户名，而没指定主机名，则主机名默认为“%”，表示一组主机
+
+此外需要注意：
+
+- 如果使用 CREATE USER 语句时没有为用户指定口令，那么 MySQL 允许该用户可以不使用口令登录系统，然而从安全的角度而言，不推荐这种做法。
+- 使用 CREATE USER 语句必须拥有 MySQL 中 mysql 数据库的 INSERT 权限或全局 CREATE USER 权限。
+- 使用 CREATE USER 语句创建一个用户账号后，会在系统自身的 MySQL 数据库的 user 表中添加一条新记录。若创建的账户已经存在，则语句执行时会出现错误。
+- 新创建的用户拥有的权限很少。他们可以登录 MySQL，只允许进行不需要权限的操作，如使用 SHOW 语句查询所有存储引擎和字符集的列表等。
+- 如果两个用户具有相同的用户名和不同的主机名，MySQL 会将他们视为不同的用户，并允许为这两个用户分配不同的权限集合。
+
+### 更改用户
+
+更改用户信息主要包括重命名，改密码，锁定或解锁用户。下面将通过案例为大家展示这些用法：
+
+```sql
+# 重命名用户
+RENAME USER 'test user'@'%'to 'test'@'%';
+# 修改密码
+ALTER USER 'test'@'%'identified by '123456789';
+# 锁定或解锁用户
+ALTER USER 'test'@'%'ACCOUNT LOCK;
+ALTER USER 'test'@'%'ACCOUNT UNLOCK;
+```
+
+### 删除用户
+
+**方法一**：使用 SQL 自带功能删除
+
+格式：
+
+```sql
+DROP USER [IF EXISTS] user [, user] ...
+```
+
+如：
+
+```sql
+DROP USER jeffrey'@'localhost'
+```
+
+**方法二**：使用 DELETE 语句删除
+
+```sql
+DELETE FROM mysql.user
+WHERE user='tom' AND host='localhost';
+-- 注意还要更新授权表：
+FLUSH PRIVILEGES;
+```
+
+## 权限管理
+
+- 对登录到 MySQL 的用户进行权限验证。
+- 所有用户的权限都存储在 MySQL 的权限表中，不合理的权限规划会给 MySQL 服务器带来安全隐患。
+- MySQL 权限系统可验证连接到一台给定主机的用户，并且赋予该用户在各类权限。
+- 账户权限信息被存储在 MySQL 数据库的   user、db、host、tables_priv、column_priv 和 procs_priv 表中。
+- MySQL 启动时，服务器将这些数据库表中的权限信息的内容读入内存。
+
+### 创建角色
+
+[CREATE ROLE](https://dev.mysql.com/doc/refman/8.0/en/create-role.html) creates one or more roles, which are named collections of privileges.
+
+格式：
+
+```sql
+CREATE ROLE [IF NOT EXISTS] role [, role] ...
+```
+
+如：
+
+```sql
+CREATE ROLE 'administrator','developer';
+CREATE ROLE 'webapp'@'localhost';
+```
+
+### 删除角色
+
+```sql
+DROP ROLE [IF EXISTS] role [, role]...
+```
+
+### 权限
+
+![image-20230510144850194](./05-access-control.assets/image-20230510144850194.png)
