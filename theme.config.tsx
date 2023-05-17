@@ -117,10 +117,10 @@ const config: DocsThemeConfig = {
   footer: {
     text: (
       <p className="mt-6 text-xs" style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-        <span>
+        {/* <span>
           <script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
           © {new Date().getFullYear()} • <a href="https://cworld.top/" target="_blank">CWorld</a> • 总访问 <span id="busuanzi_value_site_pv">???</span>
-        </span>
+        </span> */}
         <span>
           由 <a href="https://nextjs.org" target="_blank" rel="external nofollow noopener">Next.js</a> 强力驱动
           <span style={{ padding: "0 .8rem" }}>|</span>
