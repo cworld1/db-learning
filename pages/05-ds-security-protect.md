@@ -82,3 +82,172 @@ title: 第 5 章 数据库安全保护
 3. 第三层安全性是数据库对象级别的安全性，用户通过了前两层的安全性验证之后，在对具体的数据库对象（表、视图、存储过程等）进行操作时，将接受权限检查，即用户想要访问数据库里的对象时，必须事先被赋予相应的访问权限，否则系统将拒绝访问。
 
 三个层次的安全机制相当于用户访问数据库对象过程中的三道安全屏障，只有合法地通过了这三个层次的安全验证，用户才能真正访问到相应的数据库对象。
+
+## Safe range normal form (SRNF)
+
+SRNF of a query Q does not change Q ’s meaning, it just checks if Q is safe.
+
+SRNF results from the application of transformation rules to formulae that preserve their meaning. SRNF 的结果来自于对保留其含义的公式应用转换规则。
+
+Transformation Rules:
+
+- **Elimination of shortcuts(消除“快捷方式”)**: First eliminate shortcuts related to universal quantiﬁcation ∀, implication ⇒ and equivalence ⇔. 首先消除与全称量词 ∀、蕴涵符号 ⇒ 和等价符号 ⇔ 相关的快捷方式。
+- **Bounded renaming(有界变量重命名)**: Change the names of bounded variables, i.e., those occurring within the scope of a quantiﬁer, in such a way that there is no variable which is both free and bound. 将有界变量的名称更改为在量词作用域内出现的那些变量的新名称，以便不存在即是自由变量又是绑定变量的变量。
+- **Shift negation(移位否定符号)**: Successively replace subformulae in a way that negation only occurs in front of an existential quantiﬁer or an atom 逐步替换子公式，使得否定符号只出现在存在量词或原子之前:
+  - remove double negation, i.e., replace $¬¬ϕ$ by $ϕ$
+  - replace $¬(ϕ1 ∧ · · · ∧ ϕn )$ by $¬ϕ1 ∨ · · · ∨ ¬ϕn$
+  - replace $¬(ϕ1 ∨ · · · ∨ ϕn )$ by $¬ϕ1 ∧ · · · ∧ ¬ϕn$
+- **Shift disjunction(移位析取符号)**: Successively apply the distribution laws for conjunction and disjunction until there is no more disjunction occurring within the scope of a conjunction. 连续地应用合取和析取的分配律，直到在合取范围内没有更多的析取。
+- **Omit parentheses(省略括号)**: Omit all parentheses that are unnecessary according to associativity laws. 根据结合律省略所有不必要的括号。
+
+需要注意的是，SRNF 的应用需要满足一定的前提条件，例如 Q 必须是一个具有良好形式化特性的查询，才能有效地进行 SRNF 转换。另外，在实际应用中，SRNF 也可能会引入一些新的问题，如计算复杂度、查询错误等。
+
+如：
+
+$$
+\exists m(\mathrm{Director}(n,m))\land\forall m'\{\mathrm{Director}(n,m')\Rightarrow\exists r(\mathrm{Actor}(n,m',r)\land\forall r'(\mathrm{Actor}(n,m',r')\Rightarrow r=r')))
+$$
+
+第一步：消除“快捷方式”
+
+$$
+\exists m(\text{Director}(n,m))\land\forall m'(\text{Director}(n,m')\Rightarrow\exists r(\text{Actor}(n,m',r)\land\forall r'(\neg\text{Actor}(n,m',r')\lor r=r'))) \\
+\exists m(\text{Director}(n,m))\land\forall m'(\text{Director}(n,m')\Rightarrow\exists r(\text{Actor}(n,m',r)\land-\exists r'(\neg\text{Actor}(n,m',r')\lor r=r')))
+$$
+
+第二步：移位否定符号
+
+$$
+\exists m(\mathrm{Director}(n,m))\land\forall m'(\mathrm{Director}(n,m')\Rightarrow\exists r(\mathrm{Actor}(n,m',r)\land\neg\exists r'(\mathrm{Actor}(n,m',r')\land r\neq r')))
+$$
+
+第三步：继续消除“快捷方式”
+
+$$
+\exists m\{\text{Director}(n,m)\})\land\neg\exists m^{\prime}(\neg(\neg\text{Director}(n,m^{\prime})\lor\exists r\{\text{Actor}(n,m^{\prime},r)\land\neg\exists r^{\prime}(\text{Actor}(n,m^{\prime},r^{\prime})\land r\neq r^{\prime}))\}
+$$
+
+第四步：继续移位否定符号
+
+$$
+\exists m(\mathrm{Director}(n,m))\land-\exists m '(\mathrm{Director}(n,m')\land \neg \exists r(\mathrm{Actor}(n,m',r)\land \neg \exists r'(\mathrm{Actor}(n,m',r')\land r\not=r')))
+$$
+
+完成。
+
+Roughly speaking a formula is safe iﬀ all free variables in its SRNF are range-restricted. 总的来说，我们说一个关系演算公式是安全的，因为它的 SRNF 中的所有自由变量都受到范围限制。
+
+### Interaction  between Query  Languages
+
+A Clever Way of Writing Difficult SQL Queries 编写困难 SQL 查询的聪明方法：
+
+1. 在安全的关系演算中形式化查询
+2. 将查询转换为 SRNF
+3. 将 SRNF 转换为 SQL
+
+如：
+
+Hitchcock query in TRC in SRNF:
+
+$$
+\begin{array}{ll}\{d:n|\exists
+d1,d1:n(\text{Director}(d1) \wedge d:n= d1:n\wedge\\
+¬\exists d2,d2:n,d2:m(\text{Director}(d2)\wedge d2:n=d1:n\wedge\\
+¬\exists a1,a1:n,a1:m,a1:r(\text{Actor}(a1)\wedge a1:n=d2:n\wedge a1:m=d2:m\wedge\\
+¬\exists a2,a2:n,a2:m,a2:r(\text{Actor}(a2)\wedge a2:r \neq a1:r\wedge a2:m=a1:m \wedge a2:n=a1:n))))\}\end{array}
+$$
+
+Transformed into SQL:
+
+```sql
+SELECT d1.name FROM Director d1
+WHERE NOT EXISTS(
+    SELECT d2.movie FROM Director d2
+    WHERE d2.name = d1.name AND NOT EXISTS(
+        SELECT * FROM Actor a1
+        WHERE a1.name = d2.name AND a1.movie = d2.movie
+        AND NOT EXISTS(
+            SELECT * FROM Actor a2
+            WHERE a2.role <> a1.role
+            AND a2.movie = a1.movie
+            AND a2.name = a1.name
+            )
+        )
+    )
+```
+
+Each relational algebra query (except union) can be easily rewritten in SQL:
+
+- attribute selection 属性选取：$σ_{A=B}(R)$
+
+  ```sql
+  SELECT ∗ FROM R WHERE A = B;
+  ```
+
+- constant selection 常数选取: $σ_{A=c}(R)$​
+
+  ```sql
+  SELECT ∗ FROM R WHERE A = c;
+  ```
+
+- projection 投影: $π_{A_1,...,A_k}(R)$​
+
+  ```sql
+  SELECT DISTINCT A1, ..., Ak FROM R;
+  ```
+
+- renaming 命名: $δ_{A_1 → B_1,\cdots,A_k → B_k}(R)$
+
+  ```sql
+  SELECT A1 AS B1 ,..., Ak AS Bk FROM R;
+  ```
+
+- join 连接: $R1 \bowtie R2$ (with common attributes $A1, . . . , Ak$​ )
+
+  ```sql
+  SELECT ∗ FROM R1, R2 WHERE R1.A1 = R2.A1
+  AND ...
+  AND R1.Ak = R2.Ak;
+  ```
+
+- difference 减法: $R1 − R2$ (with attributes $A1, . . . , Ak$ )
+
+  ```sql
+  SELECT ∗ FROM R1 WHERE (A1, ..., Ak ) NOT IN R2;
+  ```
+
+Extend SQL by relational expressions:
+
+- Union:
+
+  ```sql
+  <query> UNION <query>
+  ```
+
+- Intersection:
+
+  ```sql
+  <query> INTERSECT <query>
+  ```
+
+- Difference:
+
+  ```sql
+  <query> DIFFERENCE <query>
+  ```
+
+- Join expressions in the FROM-clause:
+
+  ```sql
+  -- (natural) join:
+  R1 NATURAL JOIN R2
+  
+  -- equijoin:
+  R1 JOIN R2 ON R1.A1 = R2.B1
+  AND ...
+  AND R1.Ak = R2.Bk
+  
+  -- Θ-joins generalise equijoins by allowing inequations in the:
+  ON <clause>
+  ```
+
