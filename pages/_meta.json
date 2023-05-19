@@ -11,14 +11,15 @@
   "03-data-def-lang": "关系数据库标准语言——SQL",
   "04-relation-db-theory": "关系数据库理论",
   "05-ds-security-protect": "数据库安全保护",
+  "06-db-design": "数据库设计",
 
   "-- Extend": {
     "type": "separator",
     "title": "Extend"
   },
+  "opengauss": "OpenGauss",
   "experiment": "Experiment",
-  "ex01-ds-type": "数据库类型",
-  "ex02-fundamentals-of-db-sys": "数据库系统基础",
+  "ex01-ds-type": "Ex01: 数据库类型",
 
   "index": {
     "title": "Home",

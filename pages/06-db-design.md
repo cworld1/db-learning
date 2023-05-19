@@ -1,5 +1,5 @@
 ---
-title: Fundamentals of Database Systems
+title: 第 6 章 数据库设计
 ---
 
 ## 概念性数据库设计：实体-关系模型
@@ -21,7 +21,7 @@ Iterative Database Design 迭代数据库设计：
 - 重点关注概念模型及其
 - 转化为逻辑模型
 
-![image-20230517083033075](./ex02-fundamentals-of-db-sys.assets/image-20230517083033075.png)
+![image-20230517083033075](./06-db-design.assets/image-20230517083033075.png)
 
 如：From Requirements to a First Approximate Model 从需求到第一个近似模型
 
