@@ -82,33 +82,6 @@ select avg(字段名) from 数据表;
 
 ![img](./03-aggregate-fun-query.assets/2179824.png)
 
-### MAX() 函数
-
-`MAX()` 函数是求某列的最大数值。
-
-```sql
-select max(字段名) from 数据表;
-```
-
-例子说明： 现在有一张 `tb_Salary` 表,内容如下：
-
-| id  | name  | Salary | Month |
-| --- | ----- | ------ | ----- |
-| 1   | Nancy | 2300   | 11    |
-| 2   | Tob   | 5800   | 11    |
-| 3   | Carly | 3200   | 11    |
-| 4   | Nancy | 2600   | 12    |
-| 5   | Tob   | 6300   | 12    |
-| 6   | Carly | 5200   | 12    |
-
-假设场景，老板想知道公司在 `11-12月份` 中月薪最高的是多少，此时就可使用 `MAX()` 函数来统计了。
-
-![img](./03-aggregate-fun-query.assets/2179804.png)
-
-这样就可以看到公司中月薪最高是多少了。我们也可查询 `Carly` 在 `11-12月份` 中月薪最高是多少：
-
-![img](./03-aggregate-fun-query.assets/2179809.png)
-
 ## MAX() 函数
 
 `MAX()` 函数是求某列的最大数值。
