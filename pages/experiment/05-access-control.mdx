@@ -159,3 +159,201 @@ DROP ROLE [IF EXISTS] role [, role]...
 ### 权限
 
 ![image-20230510144850194](./05-access-control.assets/image-20230510144850194.png)
+
+### 用户授权
+
+授权用户：
+
+```sql
+GRANT priv_type [(column_list)]
+[, priv_type [(column_list)]]
+ON [object_type] priv_level
+TO user_or_role [, user_or_role]
+[WITH GRANT OPTION]
+[AS user
+	[WITH ROLE
+         DEFAULT | NONE | ALL
+         | ALL EXCEPT role [, role ] ...
+         | role [, role ］...
+    ]
+]
+```
+
+授权角色：
+
+```sql
+GRANT role [role] ...
+TO user_or_role [user_or_role]...
+[WITH ADMIN OPTION]
+```
+
+如授权用户：
+
+```sql
+GRANT ALL ON db1.* TO 'jeffrey'@'localhost';
+GRANT 'role1', 'role2'
+TO 'user1'@'localhost', 'user2'@'localhost';
+GRANT SELECT ON world.* TO 'role3';
+```
+
+如授权角色：
+
+```sql
+CREATE USER 'jeffrey'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON db1.* TO 'jeffrey'@'localhost';
+GRANT SELECT ON db2.invoice To 'jeffrey'@'localhost';
+ALTER USER 'jeffrey'@'localhost' WITH MAX_QUERIES_PER_HOUR 90;
+```
+
+### 权限分级
+
+- 全局层级
+- 数据库层级
+- 表层级
+- 列层级
+- 子程序层级
+
+#### 全局层级
+
+Global privileges
+
+Global privileges are administrative or apply to all databases on a given server. To assign global privileges,use on \*.syntax:
+
+```sql
+GRANT ALL ON *.TO someuser'@'somehost';
+GRANT SELECT,INSERT ON *.TO 'someuser'@'somehost';
+```
+
+注：存储在 mysql.user 表中
+
+#### 数据库层级
+
+Database privileges
+
+Database privileges apply to all objects in a given database.To assign database-level privileges,use on db_name.syntax:
+
+```sql
+GRANT ALL ON mydb.* TO someuser'@'somehost';
+GRANT SELECT, INSERT ON mydb.* TO someuser'@'somehost';
+```
+
+注：存储在 mysql.db 和 mysql.host 表中
+
+#### 列层级
+
+Column privileges
+
+Column privileges apply to single columns in a given table.Each privilege to be granted at the column level must be followed by the column or columns,enclosed within parentheses.
+
+```sql
+GRANT SELECT (col1), INSERT (col1,col2) ON mydb.mytbl TO someuser'@'somehost';
+```
+
+注：存储在 mysql.columns_priv 表中
+
+#### 子程序层级
+
+Stored Routine Privileges
+
+The `ALTER ROUTINE`, `CREATE ROUTINE`, `EXECUTE` and `GRANT OPTION` privileges apply to stored routines (procedures and functions). They can be granted at the global and database levels. Except for `CREATE ROUTINE`, these privileges can be granted at the routine level for individual routines.
+
+GRANT CREA
+
+```sql
+GRANT CREATE ROUTINE ON mydb.* TO 'someuser'@'somehost';
+GRANT EXECUTE ON PROCEDURE mydb.myproc TO someuser'@'somehost';
+```
+
+注：存储在 mysql.procs_priv 表中
+
+MySQL 权限表的验证过程为：
+
+1. 先从 user 表中的 Host, User, Password 这 3 个字段中判断连接的 ip、用户名、密码否存在，存在则通过验证。
+
+2. 通过身份认证后，进行权限分配，按照 user，db，tables_priv，columns_priv， mysql.procs_priv 的顺序进行验证。
+
+   即先检查全局权限表 user，如果 user 中对应的权限为 Y，则此用户对所有数据库的权限都为 Y，将不再检查 db, tables_priv,columns_priv；
+
+   如果为 N，则到 db 表中检查此用户对应的具体数据库，并得到 db 中为 Y 的权限；
+
+   如果 db 中为 N，则检查 tables_priv 中此数据库对应的具体表，取得表中的权限 Y，以此类推。
+
+### 查看用户权限
+
+查看所有用户：
+
+```sql
+SELECT user,host FROM mysql.user;
+```
+
+查看单个用户所有情况：
+
+```sql
+SELECT * FROM mysql.user WHERE user='root'\G
+-- \g 相当于 ’;’
+-- \G 使每个字段打印到单独的行，也有 ’;’ 的作用
+```
+
+一共有这些：
+
+![image-20230520212234543](./05-access-control.assets/image-20230520212234543.png)
+
+看自己的权限：
+
+```sql
+SHOW GRANTS\G
+```
+
+看别人的权限：
+
+```sql
+SHOW GRANTS FOR tom@'localhost'\G
+```
+
+## 角色、用户授权
+
+授权：
+
+```sql
+GRANT 'role1','role2' TO 'user1'@'localhost','user2'@'localhost';
+```
+
+收回权限：
+
+```sql
+REVOKE
+	priv_type [(column_list)]
+		[priv_type [(column_list)]] ...
+	ON [object_type]priv_level
+	FROM user_or_role [user_or_role] ...
+
+REVOKE ALL [PRIVILEGES],GRANT OPTION
+	FROM user_or_role [user_or_role] ...
+```
+
+如：
+
+```sql
+REVOKE INSERT ON *FROM 'jeffrey'@'localhost';
+REVOKE 'role1','role2' FROM 'user1'@'localhost', 'user2'@'localhost';
+REVOKE SELECT ON world.FROM 'role3';
+```
+
+### 查询权限
+
+```sql
+SHOW GRANTS
+	[FOR user_or_role [USING role [role] ... ]]
+
+user_or_role: {
+	user (see Section 6.2.4,"Specifying Account Names")
+	| role (see Section 6.2.5,"Specifying Role Names"
+}
+```
+
+如：
+
+```sql
+SHOW GRANTS FOR jeffrey'@'localhost';
+```
+
