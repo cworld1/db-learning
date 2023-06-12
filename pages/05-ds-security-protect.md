@@ -137,7 +137,7 @@ $$
 
 Roughly speaking a formula is safe iﬀ all free variables in its SRNF are range-restricted. 总的来说，我们说一个关系演算公式是安全的，因为它的 SRNF 中的所有自由变量都受到范围限制。
 
-### Interaction  between Query  Languages
+### Interaction between Query Languages
 
 A Clever Way of Writing Difficult SQL Queries 编写困难 SQL 查询的聪明方法：
 
@@ -241,13 +241,12 @@ Extend SQL by relational expressions:
   ```sql
   -- (natural) join:
   R1 NATURAL JOIN R2
-  
+
   -- equijoin:
   R1 JOIN R2 ON R1.A1 = R2.B1
   AND ...
   AND R1.Ak = R2.Bk
-  
+
   -- Θ-joins generalise equijoins by allowing inequations in the:
   ON <clause>
   ```
-
