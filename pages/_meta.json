@@ -20,6 +20,7 @@
   "opengauss": "OpenGauss",
   "experiment": "Experiment",
   "ex01-ds-type": "Ex01: 数据库类型",
+  "last": "At the last",
 
   "index": {
     "title": "Home",
