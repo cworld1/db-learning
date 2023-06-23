@@ -276,7 +276,7 @@ SELECT clock_timestamp();
 
 #### current_date/current_timestamp/current_time
 
-**current_date**
+##### current_date
 
 描述：当前日期。
 
@@ -292,7 +292,7 @@ SELECT current_date;
 # (1 row)
 ```
 
-**current_time**
+##### current_time
 
 描述：当前时间。
 

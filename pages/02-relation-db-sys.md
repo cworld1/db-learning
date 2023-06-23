@@ -505,7 +505,6 @@ Tuple Relational Calculus is a **non-procedural query language** unlike relation
 在域关系演算中，记录基于域进行过滤。
 
 **Domain Relational Calculus** is a non-procedural query language equivalent in power to Tuple Relational Calculus. Domain Relational Calculus provides only the description of the query but it does not provide the methods to solve it. In Domain Relational Calculus, a query is expressed as, 域关系演算是一种非过程查询语言，其功能等同于元组关系演算。域关系演算仅提供查询的描述，但不提供解决问题的方法。在域关系演算中，查询表示为，
-
 $$
 \{ < x1, x2, x3, ..., xn > | P (x1, x2, x3, ..., xn ) \}
 $$
