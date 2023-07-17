@@ -168,7 +168,7 @@ Actor(id, title, year, role) with:
 
 **参照完整性（Referential Integrity）**：如果关系 $R_2$ 的外码 $X$ 与关系 $R_1$ 的主码相符，则 $X$ 的每个值或者等于 $R_1$ 中主码的某一个值或者取空值。
 
-它指的是**在关系型数据库中，一个表中的外键必须引用另一个表的主键，而且这种引用必须是有效的。**具体地说，这意味着如果两个表之间有外键约束，那么在插入、更新和删除数据时必须遵守一些规则：
+它指的是 **在关系型数据库中，一个表中的外键必须引用另一个表的主键，而且这种引用必须是有效的。** 具体地说，这意味着如果两个表之间有外键约束，那么在插入、更新和删除数据时必须遵守一些规则：
 
 1. 插入：插入数据时，必须确保外键引用的主键数据已经存在。
 2. 更新：更新包含外键的记录时，必须确保新值是有效的主键值。否则，更新就会失败。
@@ -256,7 +256,7 @@ Integrity constraints greatly determine the design of a database schema
 
 3. **交（Intersection）**
 
-   关系 R 与关系 S 的交运算 结果由既属于 R 又属于 S 的元组（即 R 与 S 中相同的元组）组成一个新关系，其结果仍为 n 元关系。记作：
+   关系 R 与关系 S 的交运算，结果由既属于 R 又属于 S 的元组（即 R 与 S 中相同的元组）组成一个新关系，其结果仍为 n 元关系。记作：
 
    $$
    R∩S = \{t | t∈R∧t∈S \}
@@ -266,7 +266,7 @@ Integrity constraints greatly determine the design of a database schema
 
 4. **广义笛卡儿积（Extended Cartesian Product）**
 
-   个分别为 n 元和 m 元的关系 R 和 S 的广义笛卡儿积是一个（n+m）列的元组的集合，元组的前 n 列是关系 R 的一个元组，后 m 列是关系 S 的一个元组。若 R 有 k1 个元组，S 有 k2 个元组，则关 系 R 和关系 S 的广义笛卡儿积有 k1×k2 个元组，记作：
+   个分别为 n 元和 m 元的关系 R 和 S 的广义笛卡儿积是一个 $n+m$ 列的元组的集合，元组的前 n 列是关系 R 的一个元组，后 m 列是关系 S 的一个元组。若 R 有 $k_1$ 个元组，S 有 $k_2$ 个元组，则关系 R 和关系 S 的广义笛卡儿积有 $k_1×k_2$ 个元组，记作：
 
    $$
    R×S = \{ tr \frown ts| tr∈R∧ts∈S \}
@@ -539,7 +539,7 @@ Borrower 表：
 1. Find the loan number, branch, amount of loans of greater than or equal to 100 amount.
 
    $$
-   \{<l> |\ ∃ b, a (<l, b, a> ∈ loan ∧ (a ≥ 150)\}
+   \{\<l\> |\ ∃ b, a (<l, b, a> ∈ loan ∧ (a ≥ 150))\}
    $$
 
    | Loan number | Branch name | Amount |
