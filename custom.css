@@ -1,0 +1,13 @@
+.nx-pt-4 p img {
+  margin: 0 auto;
+}
+
+.nx-pt-4 blockquote.nx-italic {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-style: normal;
+  padding: 12px 24px;
+}
+
+html[class~="dark"] .nx-pt-4 blockquote.nx-italic {
+  background-color: rgba(255, 255, 255, 0.05);
+}
