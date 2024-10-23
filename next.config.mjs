@@ -9,7 +9,7 @@ const nextConfig = {
     unoptimized: true, // mandatory, otherwise won't export
   },
   // Optional: Change the output directory `out` -> `dist`
-  // distDir: "build"
+  distDir: "dist",
 };
 
 const withNextra = nextra({
