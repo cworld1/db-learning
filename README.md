@@ -7,7 +7,7 @@
 
 Some notes and code about CWorld learning Database.
 
-[Get Stared 前往阅读 →](https://ds.cworld.top/)
+[Get Stared 前往阅读 →](https://db-learn.cworld0.com/)
 
 ## Quick Start the Project Online
 
@@ -20,21 +20,9 @@ Click the button to clone this repository and deploy it on Vercel:
 Environment requirements:
 
 - [Node.js](https://nodejs.org) 16.14.0+
+- bun/pnpm/yarn/npm
 
-> If your Node.js version is lower than 16.13.0，Please install [corepack](https://nodejs.org/api/corepack.html) first.
->
-> ```shell
-> npm install -g corepack
-> ```
-
-### 1. Enable corepack & pnpm
-
-```shell
-corepack enable
-corepack prepare pnpm@latest --activate
-```
-
-### 2. Clone the repository
+### 1. Clone the repository
 
 ```shell
 git clone https://github.com/cworld1/db-learning.git
@@ -44,13 +32,13 @@ cd ds-learning
 ### 2. Install dependencies
 
 ```shell
-pnpm i
+bun install
 ```
 
 ### 3. Start the development server
 
 ```shell
-pnpm dev
+bun run dev
 ```
 
 Then, visit `localhost:3000`.
@@ -59,10 +47,10 @@ This command starts a local development server and opens up a browser window. Mo
 
 ### 4. Some useful commands
 
-`pnpm start`
+`bun run start`
 Starts the development server.
 
-`pnpm build`
+`bun run build`
 Bundles your website into static files for production.
 
 ## Contributions
@@ -70,6 +58,7 @@ Bundles your website into static files for production.
 As the author is only a beginner in learning Data Analysis, there are obvious mistakes in his notes. Readers are also invited to make a lot of mistakes. In addition, you are welcome to use PR or Issues to improve them.
 
 ## Thanks
+
 Some of the electronic textbooks have helped the author a lot in his studies, and without them, this notebook would not have been possible. I would like to express my gratitude to the original authors of these materials. If you have any doubts about this project, you can also read the following textbooks carefully to remedy them.
 
 - [数据库原理及应用 - shark-Gao 的博客](https://blog.csdn.net/qq_58608526/article/details/122922114)
