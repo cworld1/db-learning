@@ -1,9 +1,9 @@
 # Experiment
 
-import { Card, Cards } from "nextra-theme-docs";
+import { Cards } from "nextra/components";
 
 <Cards>
-  <Card
+  <Cards.Card
     icon={
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,8 +22,8 @@ import { Card, Cards } from "nextra-theme-docs";
     }
     title="Basic Mysql, Create table, alter table"
     href="/experiment/01-setup-mysql"
-  ></Card>
-  <Card
+  ></Cards.Card>
+  <Cards.Card
     icon={
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -42,8 +42,8 @@ import { Card, Cards } from "nextra-theme-docs";
     }
     title="Practicing Select and Creating view"
     href="/experiment/02-select-create-view"
-  ></Card>
-  <Card
+  ></Cards.Card>
+  <Cards.Card
     icon={
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -62,14 +62,19 @@ import { Card, Cards } from "nextra-theme-docs";
     }
     title="Constraints, function, index"
     href="/experiment/03-constraints-and-indexing"
-  ></Card>
-  <Card
+  ></Cards.Card>
+  <Cards.Card
     icon={
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        strokeWidth={1.5} stroke="currentColor" className="h-6 w-6" > <path
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="h-6 w-6"
+      >
+        {" "}
+        <path
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
@@ -78,8 +83,8 @@ import { Card, Cards } from "nextra-theme-docs";
     }
     title="Procedure, Function and Cursor"
     href="/experiment/04-procedure-function-cursor"
-  ></Card>
-  <Card
+  ></Cards.Card>
+  <Cards.Card
     icon={
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -98,5 +103,5 @@ import { Card, Cards } from "nextra-theme-docs";
     }
     title="Mysql access control"
     href="/experiment/05-access-control"
-  ></Card>
+  ></Cards.Card>
 </Cards>

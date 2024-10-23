@@ -3,7 +3,7 @@ title: Database Learning – Created by CWorld
 gitTimestamp: false
 ---
 
-import { Card, Cards } from "nextra-theme-docs";
+import { Cards } from "nextra/components";
 
 <div className="home-content">
   <div className="content-container">
@@ -49,7 +49,8 @@ import { Card, Cards } from "nextra-theme-docs";
   `}</style>
 </div>
 
-<Cards
+<div
+  className="cards"
   num={2}
   style={{
     maxWidth: "70rem",
@@ -59,10 +60,10 @@ import { Card, Cards } from "nextra-theme-docs";
     marginBottom: "3rem",
   }}
 >
-  <Card image arrow title="从项目介绍开始" href="/intro">
+  <Cards.Card image arrow title="从项目介绍开始" href="/intro">
     <>![Database Application](/assets/database-application.jpg)</>
-  </Card>
-  <Card image arrow title="从课程介绍开始" href="/00-at-the-beginning">
+  </Cards.Card>
+  <Cards.Card image arrow title="从课程介绍开始" href="/00-at-the-beginning">
     <>![Cloud Database](/assets/cloud-database.jpg)</>
-  </Card>
-</Cards>
+  </Cards.Card>
+</div>
