@@ -4,6 +4,7 @@ import nextra from "nextra";
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
+  basePath: "/db-learning",
   output: "export",
   images: {
     unoptimized: true, // mandatory, otherwise won't export
