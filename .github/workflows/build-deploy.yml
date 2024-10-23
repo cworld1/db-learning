@@ -36,10 +36,6 @@ jobs:
 
       # Setup bun
       - uses: oven-sh/setup-bun@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: "bun"
 
       # Install dependencies
       - name: Install dependencies
