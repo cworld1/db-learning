@@ -1,4 +1,18 @@
-const withNextra = require("nextra")({
+import nextra from "nextra";
+
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
+  output: "export",
+  images: {
+    unoptimized: true, // mandatory, otherwise won't export
+  },
+  // Optional: Change the output directory `out` -> `dist`
+  // distDir: "build"
+};
+
+const withNextra = nextra({
   // 基础配置
   latex: true,
   defaultShowCopyCode: true,
@@ -8,4 +22,4 @@ const withNextra = require("nextra")({
   themeConfig: "./theme.config.tsx",
 });
 
-module.exports = withNextra();
+export default withNextra(nextConfig);
